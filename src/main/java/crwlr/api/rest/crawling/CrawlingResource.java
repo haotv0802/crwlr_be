@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +32,8 @@ public class CrawlingResource {
 
   private HashSet<String> links = new HashSet<>();
 
+  private int pageLevel = 0;
+
   @Autowired
   public CrawlingResource(@Qualifier("crawlingService") ICrawlingService crawlingService) {
     Assert.notNull(crawlingService);
@@ -47,38 +50,45 @@ public class CrawlingResource {
   @GetMapping("/crawler/getDataCrawled")
   public String getData(
   ) {
-    String url = "http://www.lazada.sg/c20-bently-office-chair-blackinstallation-option-available-2336420.html/?spm=a2o42.cms.0.0.XpM9JV&mp=1";
-    return getPageLinks(url);
-//    return "Hello";
+    String url = "https://www.lazada.sg/shop-mobiles/";
+    getPageLinks(url);
+    return links.toString();
   }
 
-  public String getPageLinks(String URL) {
-
-    StringBuilder stringBuilder = new StringBuilder();
-
+  public void getPageLinks(String URL) {
+    if (pageLevel++ > 0) {
+      return;
+    }
     if (!links.contains(URL)) {
       try {
-        //4. (i) If not add it to the index
-        if (links.add(URL)) {
-          System.out.println(URL);
-        }
-
-        //2. Fetch the HTML code
         Document document = Jsoup.connect(URL).get();
-        //3. Parse the HTML to extract links to other URLs
-        Elements linksOnPage = document.select("a[href]");
 
-//        document.select(".basic-info__name").attr("abs:href")
+        String vendorLink = document.select(".basic-info__name").attr("abs:href");
+
+        if (!StringUtils.isEmpty(vendorLink)) {
+          if (links.add(vendorLink)) {
+            System.out.println(vendorLink);
+          }
+        } else {
+          Elements linksOnPage = document.select("a[href]");
+
+          for (Element page : linksOnPage) {
+            String tempURL = page.attr("abs:href");
+//            if (tempURL.contains("google-pixel")) {
+//              logger.error("processing: " + tempURL);
+//            }
+//            logger.info("processing: " + tempURL);
+            if (tempURL.startsWith("http://www.lazada.sg")) {
+              getPageLinks(tempURL);
+            }
+            pageLevel = 0;
+          }
+        }
 
         //5. For each extracted URL... go back to Step 4.
-        for (Element page : linksOnPage) {
-//          getPageLinks(page.attr("abs:href"));
-          stringBuilder.append(page.attr("abs:href"));
-        }
       } catch (IOException e) {
         System.err.println("For '" + URL + "': " + e.getMessage());
       }
     }
-    return stringBuilder.toString();
   }
 }
