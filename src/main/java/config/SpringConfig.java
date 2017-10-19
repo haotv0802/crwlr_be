@@ -104,7 +104,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
-    final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management";
+    final String databaseUrl = "jdbc:mysql://localhost:3306/crawler_db";
     final String usr = "haho";
     final String pass = "hoanhhao";
 
