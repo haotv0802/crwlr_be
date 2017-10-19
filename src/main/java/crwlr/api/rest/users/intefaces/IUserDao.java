@@ -1,6 +1,6 @@
-package fm.api.rest.users.intefaces;
+package crwlr.api.rest.users.intefaces;
 
-import fm.api.rest.users.UserBean;
+import crwlr.api.rest.users.UserBean;
 
 import java.util.List;
 

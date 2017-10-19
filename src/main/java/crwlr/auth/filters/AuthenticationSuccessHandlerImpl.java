@@ -1,4 +1,4 @@
-package fm.auth.filters;
+package crwlr.auth.filters;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;

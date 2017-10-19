@@ -1,7 +1,7 @@
-package fm.common.messages;
+package crwlr.common.messages;
 
-import fm.common.messages.interfaces.IMessagesDao;
-import fm.common.messages.interfaces.IMessagesService;
+import crwlr.common.messages.interfaces.IMessagesDao;
+import crwlr.common.messages.interfaces.IMessagesService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

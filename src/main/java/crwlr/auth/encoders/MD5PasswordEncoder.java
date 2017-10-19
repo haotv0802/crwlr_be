@@ -1,4 +1,4 @@
-package fm.auth.encoders;
+package crwlr.auth.encoders;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

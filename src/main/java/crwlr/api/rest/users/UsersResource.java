@@ -1,9 +1,9 @@
-package fm.api.rest.users;
+package crwlr.api.rest.users;
 
-import fm.api.rest.BaseResource;
-import fm.api.rest.users.intefaces.IUserService;
-import fm.auth.UserDetailsImpl;
-import fm.common.beans.HeaderLang;
+import crwlr.api.rest.BaseResource;
+import crwlr.api.rest.users.intefaces.IUserService;
+import crwlr.auth.UserDetailsImpl;
+import crwlr.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;

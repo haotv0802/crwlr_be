@@ -1,7 +1,7 @@
-package fm.common.error;
+package crwlr.common.error;
 
-import fm.common.FrontEndFault;
-import fm.common.ServiceFault;
+import crwlr.common.FrontEndFault;
+import crwlr.common.ServiceFault;
 
 /**
  * Property of CODIX Bulgaria EAD

@@ -1,4 +1,4 @@
-package fm.auth.encoders;
+package crwlr.auth.encoders;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 

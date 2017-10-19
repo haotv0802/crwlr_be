@@ -1,8 +1,8 @@
-package fm.api.rest.payment.methods;
+package crwlr.api.rest.payment.methods;
 
-import fm.api.rest.payment.methods.beans.CardInformation;
-import fm.api.rest.payment.methods.interfaces.IPaymentMethodsDao;
-import fm.api.rest.payment.methods.interfaces.IPaymentMethodsService;
+import crwlr.api.rest.payment.methods.beans.CardInformation;
+import crwlr.api.rest.payment.methods.interfaces.IPaymentMethodsDao;
+import crwlr.api.rest.payment.methods.interfaces.IPaymentMethodsService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;

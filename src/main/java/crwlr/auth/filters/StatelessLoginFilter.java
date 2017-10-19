@@ -1,9 +1,9 @@
-package fm.auth.filters;
+package crwlr.auth.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fm.auth.Credentials;
-import fm.auth.UserTokenDetails;
-import fm.auth.exceptions.BadLoginPayloadException;
+import crwlr.auth.Credentials;
+import crwlr.auth.UserTokenDetails;
+import crwlr.auth.exceptions.BadLoginPayloadException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

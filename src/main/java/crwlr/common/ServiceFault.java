@@ -1,4 +1,4 @@
-package fm.common;
+package crwlr.common;
 
 public class ServiceFault extends FaultBase {
   private String incidentId;

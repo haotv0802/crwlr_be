@@ -1,8 +1,8 @@
-package fm.common.messages;
+package crwlr.common.messages;
 
-import fm.api.rest.BaseResource;
-import fm.auth.UserDetailsImpl;
-import fm.common.beans.HeaderLang;
+import crwlr.api.rest.BaseResource;
+import crwlr.auth.UserDetailsImpl;
+import crwlr.common.beans.HeaderLang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Qualifier;

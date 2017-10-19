@@ -1,4 +1,4 @@
-package fm.common.messages.interfaces;
+package crwlr.common.messages.interfaces;
 
 import java.util.Map;
 

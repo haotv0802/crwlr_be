@@ -1,6 +1,6 @@
-package fm.common;
+package crwlr.common;
 
-import fm.common.error.IErrorService;
+import crwlr.common.error.IErrorService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

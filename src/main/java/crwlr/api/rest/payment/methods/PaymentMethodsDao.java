@@ -1,9 +1,9 @@
-package fm.api.rest.payment.methods;
+package crwlr.api.rest.payment.methods;
 
-import fm.api.rest.expenses.ExpensesDao;
-import fm.api.rest.payment.methods.beans.CardInformation;
-import fm.api.rest.payment.methods.interfaces.IPaymentMethodsDao;
-import fm.common.dao.DaoUtils;
+import crwlr.api.rest.expenses.ExpensesDao;
+import crwlr.api.rest.payment.methods.beans.CardInformation;
+import crwlr.api.rest.payment.methods.interfaces.IPaymentMethodsDao;
+import crwlr.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +13,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import javax.smartcardio.Card;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;

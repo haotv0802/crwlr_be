@@ -1,7 +1,7 @@
-package fm.common.messages;
+package crwlr.common.messages;
 
-import fm.common.dao.DaoUtils;
-import fm.common.messages.interfaces.IMessagesDao;
+import crwlr.common.dao.DaoUtils;
+import crwlr.common.messages.interfaces.IMessagesDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

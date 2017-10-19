@@ -1,4 +1,4 @@
-package fm.auth.exceptions;
+package crwlr.auth.exceptions;
 
 
 import org.springframework.security.core.AuthenticationException;

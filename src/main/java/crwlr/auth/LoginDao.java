@@ -1,6 +1,6 @@
-package fm.auth;
+package crwlr.auth;
 
-import fm.common.dao.DaoUtils;
+import crwlr.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

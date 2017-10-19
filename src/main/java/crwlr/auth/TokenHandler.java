@@ -1,4 +1,4 @@
-package fm.auth;
+package crwlr.auth;
 
 import io.jsonwebtoken.*;
 import org.apache.logging.log4j.LogManager;

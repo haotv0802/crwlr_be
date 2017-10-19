@@ -1,7 +1,7 @@
-package fm.api.rest.users;
+package crwlr.api.rest.users;
 
-import fm.api.rest.users.intefaces.IUserDao;
-import fm.api.rest.users.intefaces.IUserService;
+import crwlr.api.rest.users.intefaces.IUserDao;
+import crwlr.api.rest.users.intefaces.IUserService;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

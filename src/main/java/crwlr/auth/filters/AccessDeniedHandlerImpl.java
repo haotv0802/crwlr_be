@@ -1,6 +1,6 @@
-package fm.auth.filters;
+package crwlr.auth.filters;
 
-import fm.common.ServiceFault;
+import crwlr.common.ServiceFault;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;

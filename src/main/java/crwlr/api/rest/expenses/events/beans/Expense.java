@@ -1,4 +1,4 @@
-package fm.api.rest.expenses.events.beans;
+package crwlr.api.rest.expenses.events.beans;
 
 import java.math.BigDecimal;
 import java.util.Date;

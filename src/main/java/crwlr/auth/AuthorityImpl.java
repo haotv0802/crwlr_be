@@ -1,4 +1,4 @@
-package fm.auth;
+package crwlr.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 

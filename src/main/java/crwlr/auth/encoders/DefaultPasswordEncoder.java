@@ -1,4 +1,4 @@
-package fm.auth.encoders;
+package crwlr.auth.encoders;
 
 /**
  * Created by glengarski on 04/11/2016.

@@ -1,8 +1,8 @@
-package fm.api.rest.expenses.interfaces;
+package crwlr.api.rest.expenses.interfaces;
 
-import fm.api.rest.expenses.ExpensePresenter;
-import fm.api.rest.expenses.Expense;
-import fm.api.rest.expenses.ExpensesDetailsPresenter;
+import crwlr.api.rest.expenses.ExpensePresenter;
+import crwlr.api.rest.expenses.Expense;
+import crwlr.api.rest.expenses.ExpensesDetailsPresenter;
 
 import java.math.BigDecimal;
 import java.util.List;

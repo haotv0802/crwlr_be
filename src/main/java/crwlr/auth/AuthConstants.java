@@ -1,4 +1,4 @@
-package fm.auth;
+package crwlr.auth;
 
 public interface AuthConstants extends Constants
 {

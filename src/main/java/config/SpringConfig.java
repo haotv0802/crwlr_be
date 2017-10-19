@@ -8,18 +8,18 @@ import com.hazelcast.config.NetworkConfig;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.mysql.cj.jdbc.MysqlDataSource;
-import fm.auth.LoggingEnhancingFilter;
-import fm.auth.PasswordEncoderImpl;
-import fm.auth.TokenAuthenticationService;
-import fm.auth.encoders.DefaultPasswordEncoder;
-import fm.auth.encoders.MD5HalfPasswordEncoder;
-import fm.auth.encoders.MD5PasswordEncoder;
-import fm.auth.encoders.SHA1PasswordEncoder;
-import fm.auth.filters.*;
-import fm.common.HeaderLangHandlerMethodArgumentResolver;
-import fm.transaction.ConnectionsWatchdog;
-import fm.transaction.TransactionFilter;
-import fm.transaction.TransactionsList;
+import crwlr.auth.LoggingEnhancingFilter;
+import crwlr.auth.PasswordEncoderImpl;
+import crwlr.auth.TokenAuthenticationService;
+import crwlr.auth.encoders.DefaultPasswordEncoder;
+import crwlr.auth.encoders.MD5HalfPasswordEncoder;
+import crwlr.auth.encoders.MD5PasswordEncoder;
+import crwlr.auth.encoders.SHA1PasswordEncoder;
+import crwlr.auth.filters.*;
+import crwlr.common.HeaderLangHandlerMethodArgumentResolver;
+import crwlr.transaction.ConnectionsWatchdog;
+import crwlr.transaction.TransactionFilter;
+import crwlr.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,12 +72,8 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-//Marks this class as configuration
 @Configuration
-//Enable API documentation
-// Specifies which package to scan
-@ComponentScan({"crwlr"}) // xml config: <context:component-scan base-package="fm"/>
-// Enables Spring's annotations
+@ComponentScan({"crwlr"})
 @EnableWebMvc
 @EnableAspectJAutoProxy(proxyTargetClass = true)
 public class SpringConfig extends WebMvcConfigurerAdapter {
@@ -108,37 +104,18 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
 
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
-
-//    final String databaseUrl = "jdbc:oracle:thin:@BULL.codixfr.private:22630/BULL";
-//    final String usr = "imxdb";
-//    final String pass = "manager";
-
     final String databaseUrl = "jdbc:mysql://localhost:3306/finance_management";
     final String usr = "haho";
     final String pass = "hoanhhao";
 
     log.debug("databaseUrl=={}", databaseUrl);
 
-//    BasicDataSource dataSource = new BasicDataSource();
-//
-//    dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-//    dataSource.setUsername("username");
-//    dataSource.setPassword("password");
-//    dataSource.setUrl("jdbc:mysql://<host>:<port>/<database>");
-//    dataSource.setMaxActive(10);
-//    dataSource.setMaxIdle(5);
-//    dataSource.setInitialSize(5);
-//    dataSource.setValidationQuery("SELECT 1");
-
-//     JdbcDataSource ds = new JdbcDataSource();
     MysqlDataSource ds = new MysqlDataSource();
-//    OracleDataSource ds = new OracleDataSource();
     ds.setURL(databaseUrl);
     ds.setUser(usr);
     ds.setPassword(pass);
 
     return ds;
-//    return new ManagedDataSourceProxy(ds);
   }
 
   @Bean(name = "txManager")
@@ -155,23 +132,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
     configurer.defaultContentType(MediaType.APPLICATION_JSON);
-    // configurer.favorPathExtension(true);
-    // configurer.mediaType("html", MediaType.APPLICATION_JSON);
   }
-
- /*
- @Bean
-  public GlobalExceptionHandler createGlobalExceptionHandler() {
-    return new GlobalExceptionHandler(message);
-  }
-  */
-
-
-  /* This doesn't play well, yet, with spring security, fallback to filter solution
-  @Override
-  public void addCorsMappings(CorsRegistry registry) {
-    //registry.addMapping("*//*").allowedOrigins("http://localhost:8383");
-    registry.addMapping("*/
 
   /**
    * ").allowCredentials(true).exposedHeaders("Location");

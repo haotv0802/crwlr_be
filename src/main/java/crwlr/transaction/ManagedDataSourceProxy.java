@@ -1,6 +1,6 @@
-package fm.transaction;
+package crwlr.transaction;
 
-import fm.auth.UserDetailsImpl;
+import crwlr.auth.UserDetailsImpl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.core.Authentication;

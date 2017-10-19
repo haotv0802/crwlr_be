@@ -1,7 +1,7 @@
-package fm.api.rest.expenses;
+package crwlr.api.rest.expenses;
 
-import fm.api.rest.expenses.interfaces.IExpensesDao;
-import fm.api.rest.expenses.interfaces.IExpensesService;
+import crwlr.api.rest.expenses.interfaces.IExpensesDao;
+import crwlr.api.rest.expenses.interfaces.IExpensesService;
 import io.jsonwebtoken.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

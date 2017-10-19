@@ -1,10 +1,10 @@
-package fm.api.rest.payment.methods;
+package crwlr.api.rest.payment.methods;
 
-import fm.api.rest.BaseResource;
-import fm.api.rest.payment.methods.beans.CardInformation;
-import fm.api.rest.payment.methods.interfaces.IPaymentMethodsService;
-import fm.auth.UserDetailsImpl;
-import fm.common.beans.HeaderLang;
+import crwlr.api.rest.BaseResource;
+import crwlr.api.rest.payment.methods.beans.CardInformation;
+import crwlr.api.rest.payment.methods.interfaces.IPaymentMethodsService;
+import crwlr.auth.UserDetailsImpl;
+import crwlr.common.beans.HeaderLang;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

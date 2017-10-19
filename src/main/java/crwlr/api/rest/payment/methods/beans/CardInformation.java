@@ -1,4 +1,4 @@
-package fm.api.rest.payment.methods.beans;
+package crwlr.api.rest.payment.methods.beans;
 
 /**
  * Created by haho on 6/26/2017.

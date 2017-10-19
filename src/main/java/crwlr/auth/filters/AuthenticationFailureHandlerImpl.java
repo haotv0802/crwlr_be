@@ -1,10 +1,10 @@
-package fm.auth.filters;
+package crwlr.auth.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import fm.auth.exceptions.BadLoginPayloadException;
-import fm.auth.exceptions.HardLimitReachedException;
-import fm.auth.exceptions.SoftLimitReachedException;
-import fm.common.ServiceFault;
+import crwlr.auth.exceptions.BadLoginPayloadException;
+import crwlr.auth.exceptions.HardLimitReachedException;
+import crwlr.auth.exceptions.SoftLimitReachedException;
+import crwlr.common.ServiceFault;
 import org.springframework.context.MessageSource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;

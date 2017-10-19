@@ -1,4 +1,4 @@
-package fm.auth;
+package crwlr.auth;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;

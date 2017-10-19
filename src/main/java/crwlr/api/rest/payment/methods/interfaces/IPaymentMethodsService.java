@@ -1,6 +1,6 @@
-package fm.api.rest.payment.methods.interfaces;
+package crwlr.api.rest.payment.methods.interfaces;
 
-import fm.api.rest.payment.methods.beans.CardInformation;
+import crwlr.api.rest.payment.methods.beans.CardInformation;
 
 import java.util.List;
 
