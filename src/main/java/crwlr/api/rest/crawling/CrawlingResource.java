@@ -47,7 +47,7 @@ public class CrawlingResource {
   @GetMapping("/crawler/getDataCrawled")
   public String getData(
   ) {
-    String url = "http://www.lazada.sg";
+    String url = "http://www.lazada.sg/c20-bently-office-chair-blackinstallation-option-available-2336420.html/?spm=a2o42.cms.0.0.XpM9JV&mp=1";
     return getPageLinks(url);
 //    return "Hello";
   }
@@ -56,8 +56,6 @@ public class CrawlingResource {
 
     StringBuilder stringBuilder = new StringBuilder();
 
-    //4. Check if you have already crawled the URLs
-    //(we are intentionally not checking for duplicate content in this example)
     if (!links.contains(URL)) {
       try {
         //4. (i) If not add it to the index
@@ -70,12 +68,12 @@ public class CrawlingResource {
         //3. Parse the HTML to extract links to other URLs
         Elements linksOnPage = document.select("a[href]");
 
+//        document.select(".basic-info__name").attr("abs:href")
+
         //5. For each extracted URL... go back to Step 4.
         for (Element page : linksOnPage) {
 //          getPageLinks(page.attr("abs:href"));
           stringBuilder.append(page.attr("abs:href"));
-          stringBuilder.append(System.getProperty("line.separator"));
-          stringBuilder.append(System.getProperty("line.separator"));
         }
       } catch (IOException e) {
         System.err.println("For '" + URL + "': " + e.getMessage());
