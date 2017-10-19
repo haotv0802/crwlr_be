@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -44,7 +46,19 @@ public class CrawlingResource {
   @GetMapping("/crawler/getDataCrawled")
   public Map<String, Set<VendorProduct>> getData(
   ) {
-    return this.crawlingService.saveCrawledData();
+    List<String> pages = new ArrayList<>();
+    pages.add("https://www.lazada.sg/value-market/");
+//    pages.add("https://www.lazada.sg/empire-13");
+//    pages.add("https://www.lazada.sg/boom_");
+//    pages.add("https://www.lazada.sg/the-bro-store");
+//    pages.add("https://www.lazada.sg/dotec");
+//    pages.add("https://www.lazada.sg/diotem");
+//    pages.add("https://www.lazada.sg/taka-jewellery1");
+//    pages.add("https://www.lazada.sg/crystalawaking");
+//    pages.add("https://www.lazada.sg/nicee-shop");
+//    pages.add("https://www.lazada.sg/itechcool");
+
+    return this.crawlingService.saveCrawledData(pages);
   }
 
 }

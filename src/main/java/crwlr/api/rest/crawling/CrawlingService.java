@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.io.IOException;
 import java.util.*;
@@ -26,8 +25,6 @@ import java.util.*;
 public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
-
-  private Set<String> vendorLinks = new HashSet<>();
 
   private Set<VendorInfo> vendors = new HashSet<>();
 
@@ -43,16 +40,9 @@ public class CrawlingService implements ICrawlingService {
   }
 
   @Override
-  public Map<String, Set<VendorProduct>> saveCrawledData() {
-    String url = "https://www.lazada.sg/xiaomi-redmi-note-4x-3gb32gb-gold-exportgold-32gb-13521233.html?spm=a2o42.category-010100000000.0.0.5aIjzG&ff=1&sc=EQM=";
-    getVendors(url);
-    url = "https://www.lazada.sg/google-pixel-xl-international-version-export-10051700.html?ff=1&sc=EQM=";
-    getVendors(url);
-
-    Iterator<String> vendorIterator = vendorLinks.iterator();
-    while (vendorIterator.hasNext()) {
-      String vendor = vendorIterator.next();
-      getVendorProduct(vendor);
+  public Map<String, Set<VendorProduct>> saveCrawledData(List<String> pages) {
+    for (String page : pages) {
+      getVendorProduct(page);
     }
     return vendorsProductMap;
   }
@@ -67,7 +57,7 @@ public class CrawlingService implements ICrawlingService {
       Elements productLinks = content.select("a[href]");
 
       for (Element link : productLinks) {
-        if (number++ > 10) {
+        if (number++ > 5) {
           break;
         }
         String productLink = link.attr("abs:href");
@@ -104,41 +94,6 @@ public class CrawlingService implements ICrawlingService {
 
     } catch (IOException e) {
       System.err.println("For '" + productLink + "': " + e.getMessage());
-    }
-  }
-
-  private void getVendors(String url) {
-//    if (pageLevel++ > 0) {
-//      return;
-//    }
-    if (!vendorLinks.contains(url)) {
-      try {
-        Document document = Jsoup.connect(url).get();
-
-        String vendorLink = document.select(".basic-info__name").attr("abs:href");
-
-        if (!StringUtils.isEmpty(vendorLink)) {
-          if (vendorLinks.add(vendorLink)) {
-            logger.info(vendorLink);
-          }
-        } else {
-          Elements linksOnPage = document.select("a[href]");
-
-          for (Element page : linksOnPage) {
-            String tempURL = page.attr("abs:href");
-            logger.info("processing: " + tempURL);
-            if (tempURL.startsWith("http://www.lazada.sg")) {
-              getVendors(tempURL);
-            } else {
-              logger.warn(tempURL);
-            }
-//            pageLevel = 0;
-          }
-        }
-
-      } catch (IOException e) {
-        System.err.println("For '" + url + "': " + e.getMessage());
-      }
     }
   }
 }
