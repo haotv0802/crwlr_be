@@ -1,7 +1,7 @@
 package crwlr.api.rest.crawling;
 
+import crwlr.api.rest.crawling.interfaces.ICrawlingDao;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
-import crwlr.common.messages.interfaces.IMessagesDao;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -14,16 +14,17 @@ import java.util.Map;
 @Service("crawlingService")
 public class CrawlingService implements ICrawlingService {
 
-  private final IMessagesDao messagesDao;
+  private final ICrawlingDao crawlingDao;
 
-  public CrawlingService(@Qualifier("messagesDao") IMessagesDao messagesDao) {
-    Assert.notNull(messagesDao);
+  public CrawlingService(@Qualifier("messagesDao") ICrawlingDao crawlingDao) {
+    Assert.notNull(crawlingDao);
 
-    this.messagesDao = messagesDao;
+    this.crawlingDao = crawlingDao;
   }
 
   @Override
   public Map<String, Map<String, String>> getMessages(String lang) {
-    return this.messagesDao.getMessages(lang);
+//    return this.messagesDao.getMessages(lang);
+    return null;
   }
 }
