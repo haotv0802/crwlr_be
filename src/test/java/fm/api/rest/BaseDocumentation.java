@@ -58,20 +58,6 @@ import static org.springframework.util.StringUtils.collectionToDelimitedString;
 public abstract class BaseDocumentation extends AbstractTransactionalTestNGSpringContextTests {
   protected final Logger logger = LogManager.getLogger(getClass());
 
-  @Autowired
-  @Qualifier("authTokenService")
-  protected IAuthTokenService authTokenService;
-
-  @Autowired
-  @Qualifier("authTokenServiceForAdmin")
-  protected IAuthTokenService authTokenServiceForAdmin;
-
-  protected final String APP_BUILD_NAME = "/v9";
-
-  protected final String SNIPPET_NAME_PATTERN = "{class-name}/{method-name}";
-
-  protected String[] langs = {"en", "fr"};
-
   protected MockMvc mockMvc;
 
   @Autowired
@@ -112,11 +98,6 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
                 .withPort(8080)
                 .and()
                 .snippets()
-                .withDefaults(
-                    curlRequest(getCurlRequestAttributes())
-                    , httpRequest(getHttpRequestAttributes())
-                    , httpResponse(getHttpResponseAttributes())
-                )
             )
             .alwaysDo(print(printWriter))
             .build();
@@ -132,64 +113,4 @@ public abstract class BaseDocumentation extends AbstractTransactionalTestNGSprin
     this.restDocumentation.afterTest();
   }
 
-  protected String msgI18n(String property) {
-    return messageSource.getMessage(property, null, locale);
-  }
-
-  protected String msgI18n(String property, Locale locale) {
-    return messageSource.getMessage(property, null, locale);
-  }
-
-  protected String msgI18n(String property, Object[] args, Locale locale) {
-    return messageSource.getMessage(property, args, locale);
-  }
-
-  private Map<String, Object> getCurlRequestAttributes() {
-    return attributes(
-        key("title").value(msgI18n(MessageProperties.CURL_REQUEST_TITLE)));
-  }
-
-  private Map<String, Object> getHttpRequestAttributes() {
-    return attributes(
-        key("title").value(msgI18n(MessageProperties.HTTP_REQUEST_TITLE)));
-  }
-
-  private Map<String, Object> getHttpResponseAttributes() {
-    return attributes(
-        key("title").value(msgI18n(MessageProperties.HTTP_RESPONSE_TITLE)));
-  }
-
-  protected static class ConstrainedFields {
-
-    private final ConstraintDescriptions cd;
-
-    public ConstrainedFields(Class<?> input) {
-      cd = getConstraintDescriptions(input);
-    }
-
-    public FieldDescriptor WithPath(String path) {
-      return
-          fieldWithPath(path)
-              .attributes(key("constraints").value(collectionToDelimitedString(cd.descriptionsForProperty(path), ". ")));
-    }
-
-    private ConstraintDescriptions getConstraintDescriptions(Class<?> clazz) {
-      return new
-          ConstraintDescriptions(
-          clazz,
-          new ResourceBundleConstraintDescriptionResolver(
-              getBundle("org.springframework.restdocs.constraints.ConstraintDescriptions", locale))
-      );
-    }
-  }
-
-  public FieldDescriptor fieldWithParams(String patch, Object description, Object type) {
-    return PayloadDocumentation.fieldWithPath(patch).description(description).type(type);
-  }
-
-  public FieldDescriptor fieldWithParams(String patch, String message, Object type) {
-
-    String description = StringUtils.isEmpty(msgI18n(message)) ? message : msgI18n(message);
-    return PayloadDocumentation.fieldWithPath(patch).description(description).type(type);
-  }
 }
