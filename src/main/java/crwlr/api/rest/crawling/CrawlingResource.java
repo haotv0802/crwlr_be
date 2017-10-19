@@ -30,7 +30,7 @@ public class CrawlingResource {
 
   private final ICrawlingService crawlingService;
 
-  private HashSet<String> links = new HashSet<>();
+  private HashSet<String> vendorLinks = new HashSet<>();
 
   private int pageLevel = 0;
 
@@ -50,23 +50,25 @@ public class CrawlingResource {
   @GetMapping("/crawler/getDataCrawled")
   public String getData(
   ) {
-    String url = "https://www.lazada.sg/shop-mobiles/";
+    String url = "https://www.lazada.sg/xiaomi-redmi-note-4x-3gb32gb-gold-exportgold-32gb-13521233.html?spm=a2o42.category-010100000000.0.0.5aIjzG&ff=1&sc=EQM=";
     getPageLinks(url);
-    return links.toString();
+    url = "https://www.lazada.sg/google-pixel-xl-international-version-export-10051700.html?ff=1&sc=EQM=";
+    getPageLinks(url);
+    return vendorLinks.toString();
   }
 
   public void getPageLinks(String URL) {
-    if (pageLevel++ > 0) {
-      return;
-    }
-    if (!links.contains(URL)) {
+//    if (pageLevel++ > 0) {
+//      return;
+//    }
+    if (!vendorLinks.contains(URL)) {
       try {
         Document document = Jsoup.connect(URL).get();
 
         String vendorLink = document.select(".basic-info__name").attr("abs:href");
 
         if (!StringUtils.isEmpty(vendorLink)) {
-          if (links.add(vendorLink)) {
+          if (vendorLinks.add(vendorLink)) {
             System.out.println(vendorLink);
           }
         } else {
@@ -74,14 +76,13 @@ public class CrawlingResource {
 
           for (Element page : linksOnPage) {
             String tempURL = page.attr("abs:href");
-//            if (tempURL.contains("google-pixel")) {
-//              logger.error("processing: " + tempURL);
-//            }
-//            logger.info("processing: " + tempURL);
+            logger.info("processing: " + tempURL);
             if (tempURL.startsWith("http://www.lazada.sg")) {
               getPageLinks(tempURL);
+            } else {
+              logger.warn(tempURL);
             }
-            pageLevel = 0;
+//            pageLevel = 0;
           }
         }
 
