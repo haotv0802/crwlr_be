@@ -74,6 +74,8 @@ public class CrawlingResource {
         for (Element page : linksOnPage) {
 //          getPageLinks(page.attr("abs:href"));
           stringBuilder.append(page.attr("abs:href"));
+          stringBuilder.append(System.getProperty("line.separator"));
+          stringBuilder.append(System.getProperty("line.separator"));
         }
       } catch (IOException e) {
         System.err.println("For '" + URL + "': " + e.getMessage());
