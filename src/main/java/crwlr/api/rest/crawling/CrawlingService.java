@@ -1,6 +1,6 @@
 package crwlr.api.rest.crawling;
 
-import crwlr.api.rest.crawling.beans.VendorInfo;
+import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProduct;
 import crwlr.api.rest.crawling.interfaces.ICrawlingDao;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
@@ -26,7 +26,7 @@ public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
 
-  private Set<VendorInfo> vendors = new HashSet<>();
+  private Set<Vendor> vendors = new HashSet<>();
 
   private Map<String, Set<VendorProduct>> vendorsProductMap = new HashMap<>();
 
@@ -76,20 +76,20 @@ public class CrawlingService implements ICrawlingService {
       vendorProduct.setProductName(document.select("#prod_title").text());
       vendorProduct.setCategory(document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]").get(0).select("span").text());
 
-      VendorInfo vendorInfo = new VendorInfo();
-      vendorInfo.setName(document.select(".basic-info__name").get(0).text());
+      Vendor vendor = new Vendor();
+      vendor.setName(document.select(".basic-info__name").get(0).text());
 
       String rating = document.select("div.seller-rating").attr("data-tooltip-header");
       rating = rating.substring(0, rating.indexOf("/"));
-      vendorInfo.setRating(Float.valueOf(rating));
+      vendor.setRating(Float.valueOf(rating));
 
-      vendorInfo.setTimeOnLazada(Integer.valueOf(document.select(".time-on-lazada__value").get(0).text()));
-      vendorInfo.setSize(Integer.valueOf(document.select(".seller-size__content").select(".seller-size-icon").attr("data-level")));
+      vendor.setTimeOnLazada(Integer.valueOf(document.select(".time-on-lazada__value").get(0).text()));
+      vendor.setSize(Integer.valueOf(document.select(".seller-size__content").select(".seller-size-icon").attr("data-level")));
 
-      vendorProduct.setVendorInfo(vendorInfo);
+      vendorProduct.setVendor(vendor);
 
-      vendors.add(vendorInfo);
-      Set<VendorProduct> productList = vendorsProductMap.computeIfAbsent(vendorInfo.getName(), k -> new HashSet<>());
+      vendors.add(vendor);
+      Set<VendorProduct> productList = vendorsProductMap.computeIfAbsent(vendor.getName(), k -> new HashSet<>());
       productList.add(vendorProduct);
 
     } catch (IOException e) {

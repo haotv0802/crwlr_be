@@ -1,5 +1,6 @@
 package crwlr.api.rest.crawling;
 
+import crwlr.api.rest.crawling.beans.VendorProduct;
 import crwlr.api.rest.crawling.interfaces.ICrawlingDao;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -7,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
+
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by haho on 6/12/2017.
@@ -23,6 +28,21 @@ public class CrawlingDao implements ICrawlingDao {
     Assert.notNull(namedTemplate);
 
     this.namedTemplate = namedTemplate;
+  }
+
+  @Override
+  public void saveCrawledData(Map<String, Set<VendorProduct>> data) {
+    final String sql =
+                   "SELECT                      "
+                 + "	m.message_key,            "
+                 + "	m.message_en,             "
+                 + "	m.message_fr              "
+                 + "FROM                        "
+                 + "	fm_messages m             "
+                 + "WHERE                       "
+                 + "	m.role_id is null         "
+                 + "AND m.component_name = :name"
+    ;
   }
 //
 //  @Override

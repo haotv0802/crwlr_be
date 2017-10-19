@@ -5,7 +5,7 @@ package crwlr.api.rest.crawling.beans;
  *
  * @author haho
  */
-public class VendorInfo {
+public class Vendor {
   private String name;
   private String location;
   private Integer shipOnTime;
@@ -67,10 +67,10 @@ public class VendorInfo {
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof VendorInfo)) {
+    if (!(obj instanceof Vendor)) {
       return false;
     }
-    VendorInfo comparedVendor = (VendorInfo) obj;
+    Vendor comparedVendor = (Vendor) obj;
     if (comparedVendor.getName().equals(this.getName())) {
       return true;
     } else {
