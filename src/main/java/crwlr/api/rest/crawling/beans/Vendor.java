@@ -1,5 +1,7 @@
 package crwlr.api.rest.crawling.beans;
 
+import java.util.Set;
+
 /**
  * Date: 10/19/2017 Time: 5:00 PM
  *
@@ -16,6 +18,7 @@ public class Vendor {
   private Integer timeOnLazada;
   private Float rating;
   private Integer size;
+  private Set<VendorProduct> products;
 
   public String getName() {
     return name;
@@ -108,5 +111,13 @@ public class Vendor {
 
   public void setSize(Integer size) {
     this.size = size;
+  }
+
+  public Set<VendorProduct> getProducts() {
+    return products;
+  }
+
+  public void setProducts(Set<VendorProduct> products) {
+    this.products = products;
   }
 }

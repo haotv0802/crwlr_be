@@ -1,5 +1,6 @@
 package crwlr.api.rest.crawling;
 
+import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProduct;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
 import org.apache.logging.log4j.LogManager;
@@ -44,7 +45,7 @@ public class CrawlingResource {
   }
 
   @GetMapping("/crawler/getDataCrawled")
-  public Map<String, Set<VendorProduct>> getData(
+  public Map<String, Vendor> getData(
   ) {
     List<String> pages = new ArrayList<>();
     pages.add("https://www.lazada.sg/value-market/");

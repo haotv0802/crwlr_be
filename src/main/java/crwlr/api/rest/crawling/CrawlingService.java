@@ -26,9 +26,9 @@ public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
 
-  private Set<Vendor> vendors = new HashSet<>();
-
   private Map<String, Set<VendorProduct>> vendorsProductMap = new HashMap<>();
+
+  private Map<String, Vendor> vendorMap = new HashMap<>();
 
   private final Logger logger = LogManager.getLogger(getClass());
 
@@ -40,11 +40,11 @@ public class CrawlingService implements ICrawlingService {
   }
 
   @Override
-  public Map<String, Set<VendorProduct>> saveCrawledData(List<String> pages) {
+  public Map<String, Vendor> saveCrawledData(List<String> pages) {
     for (String page : pages) {
       getVendorProduct(page);
     }
-    return vendorsProductMap;
+    return vendorMap;
   }
 
   private void getVendorProduct(String vendorLink) {
@@ -72,25 +72,40 @@ public class CrawlingService implements ICrawlingService {
   private void getProductDetails(String productLink) {
     try {
       Document document = Jsoup.connect(productLink).get();
+
+      String vendorName = document.select(".basic-info__name").get(0).text();
+
+      Vendor vendor = vendorMap.get(vendorName);
+      if (null == vendor) {
+        vendor = new Vendor();
+        vendor.setName(vendorName);
+
+        String rating = document.select("div.seller-rating").attr("data-tooltip-header");
+        rating = rating.substring(0, rating.indexOf("/"));
+        vendor.setRating(Float.valueOf(rating));
+
+        int timeOnLazada = Integer.valueOf(document.select(".time-on-lazada__value").get(0).text());
+        vendor.setTimeOnLazada(timeOnLazada);
+
+        int size = Integer.valueOf(document.select(".seller-size__content").select(".seller-size-icon").attr("data-level"));
+        vendor.setSize(size);
+
+        vendorMap.put(vendorName, vendor);
+      }
+
       VendorProduct vendorProduct = new VendorProduct();
-      vendorProduct.setProductName(document.select("#prod_title").text());
-      vendorProduct.setCategory(document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]").get(0).select("span").text());
+      String productName = document.select("#prod_title").text();
+      vendorProduct.setProductName(productName);
+      String category = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]").get(0).select("span").text();
+      vendorProduct.setCategory(category);
 
-      Vendor vendor = new Vendor();
-      vendor.setName(document.select(".basic-info__name").get(0).text());
+      Set<VendorProduct> products = vendor.getProducts();
+      if (null == products) {
+        products = new HashSet<>();
+        vendor.setProducts(products);
+      }
+      products.add(vendorProduct);
 
-      String rating = document.select("div.seller-rating").attr("data-tooltip-header");
-      rating = rating.substring(0, rating.indexOf("/"));
-      vendor.setRating(Float.valueOf(rating));
-
-      vendor.setTimeOnLazada(Integer.valueOf(document.select(".time-on-lazada__value").get(0).text()));
-      vendor.setSize(Integer.valueOf(document.select(".seller-size__content").select(".seller-size-icon").attr("data-level")));
-
-      vendorProduct.setVendor(vendor);
-
-      vendors.add(vendor);
-      Set<VendorProduct> productList = vendorsProductMap.computeIfAbsent(vendor.getName(), k -> new HashSet<>());
-      productList.add(vendorProduct);
 
     } catch (IOException e) {
       System.err.println("For '" + productLink + "': " + e.getMessage());

@@ -8,7 +8,6 @@ package crwlr.api.rest.crawling.beans;
 public class VendorProduct {
   private String productName;
   private String category;
-  private VendorInfo vendorInfo; /// **
 
   public String getProductName() {
     return productName;
@@ -24,13 +23,5 @@ public class VendorProduct {
 
   public void setCategory(String category) {
     this.category = category;
-  }
-
-  public VendorInfo getVendorInfo() {
-    return vendorInfo;
-  }
-
-  public void setVendorInfo(VendorInfo vendorInfo) {
-    this.vendorInfo = vendorInfo;
   }
 }
