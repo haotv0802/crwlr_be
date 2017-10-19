@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="crwlr_be:war exploded">
-    <output-path>$PROJECT_DIR$/target/fm-be</output-path>
+    <output-path>$PROJECT_DIR$/target/crwlr_be</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -60,7 +60,7 @@
         </element>
       </element>
       <element id="directory" name="META-INF">
-        <element id="file-copy" path="$PROJECT_DIR$/target/fm-be/META-INF/MANIFEST.MF" />
+        <element id="file-copy" path="$PROJECT_DIR$/target/crwlr_be/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="crwlr_be/web/Web" />
     </root>

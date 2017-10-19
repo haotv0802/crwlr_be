@@ -1,7 +1,7 @@
 <component name="ArtifactManager">
   <artifact type="war" name="crwlr_be:war">
     <output-path>$PROJECT_DIR$/target</output-path>
-    <root id="archive" name="fm-be.war">
+    <root id="archive" name="crwlr_be.war">
       <element id="artifact" artifact-name="crwlr_be:war exploded" />
     </root>
   </artifact>

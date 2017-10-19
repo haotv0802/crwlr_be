@@ -258,10 +258,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     public MessageSource messageSource() {
       ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
       messageSource.setBasenames(
-          "i18n.LoginResource",
-          "i18n.admin_image",
-          "i18n.admin_messages",
-          "i18n.expenses"
+          "i18n.messages"
       );
       messageSource.setUseCodeAsDefaultMessage(true);
       return messageSource;
@@ -305,7 +302,8 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           .authorizeRequests()
           //allow anonymous POSTs to login
           .antMatchers(HttpMethod.POST, "/svc/login").permitAll()
-          .antMatchers(HttpMethod.GET, "/svc/messages").permitAll()
+          .antMatchers(HttpMethod.POST, "/svc/crawler/crawlingData").permitAll()
+          .antMatchers(HttpMethod.GET, "/svc/crawler/getDataCrawled").permitAll()
           //all other request need to be authenticated
           .antMatchers("/svc/**").authenticated()
           .and()
