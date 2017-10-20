@@ -4,9 +4,12 @@ import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProduct;
 import crwlr.api.rest.crawling.interfaces.ICrawlingDao;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -17,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.*;
 
 /**
@@ -81,6 +86,27 @@ public class CrawlingService implements ICrawlingService {
       Document document = Jsoup.connect(vendorLink).get();
 
       Elements content = document.select(".c-product-list");
+
+      String sellerId = document.select("body").attr("data-spm");
+      if (!StringUtils.isEmpty(sellerId)) {
+        sellerId = sellerId.substring(sellerId.indexOf("-") + 1);
+        try {
+          JSONObject json = new JSONObject(
+              IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=" + sellerId),
+                  Charset.forName("UTF-8")));
+          JSONObject seller = (JSONObject) json.get("seller");
+          String location = seller.getString("location");
+          String shipOnTime = seller.getJSONObject("shipped_on_time").getString("average_rate");
+          String positive = seller.getJSONObject("seller_reviews").getJSONObject("positive").getString("total");
+          String negative = seller.getJSONObject("seller_reviews").getJSONObject("negative").getString("total");
+          String neutral = seller.getJSONObject("seller_reviews").getJSONObject("neutral").getString("total");
+          String timeOnLazada = seller.getJSONObject("time_on_lazada").getString("months");
+          String sellerSize = seller.getString("size");
+          String rating = seller.getString("rate");
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+      }
 
       Elements productLinks = content.select("a[href]");
 
