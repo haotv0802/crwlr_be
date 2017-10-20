@@ -26,14 +26,12 @@ public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
 
-  private Map<String, Set<VendorProduct>> vendorsProductMap = new HashMap<>();
-
   private Map<String, Vendor> vendorMap = new HashMap<>();
 
   private final Logger logger = LogManager.getLogger(getClass());
 
   @Autowired
-  public CrawlingService(@Qualifier("messagesDao") ICrawlingDao crawlingDao) {
+  public CrawlingService(@Qualifier("crawlingDao") ICrawlingDao crawlingDao) {
     Assert.notNull(crawlingDao);
 
     this.crawlingDao = crawlingDao;
@@ -43,6 +41,17 @@ public class CrawlingService implements ICrawlingService {
   public Map<String, Vendor> saveCrawledData(List<String> pages) {
     for (String page : pages) {
       getVendorProduct(page);
+    }
+
+    Set<String> keys = vendorMap.keySet();
+    for (String key : keys) {
+      Vendor vendor = vendorMap.get(key);
+      crawlingDao.saveVendor(vendor);
+
+      Set<VendorProduct> products = vendor.getProducts();
+      for (VendorProduct product: products) {
+        crawlingDao.saveVendorProduct(product, vendor.getName());
+      }
     }
     return vendorMap;
   }
@@ -95,7 +104,7 @@ public class CrawlingService implements ICrawlingService {
 
       VendorProduct vendorProduct = new VendorProduct();
       String productName = document.select("#prod_title").text();
-      vendorProduct.setProductName(productName);
+      vendorProduct.setName(productName);
       String category = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]").get(0).select("span").text();
       vendorProduct.setCategory(category);
 

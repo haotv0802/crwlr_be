@@ -12,6 +12,7 @@ import org.springframework.restdocs.ManualRestDocumentation;
 import org.springframework.session.ExpiringSession;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
 import org.springframework.test.context.testng.AbstractTransactionalTestNGSpringContextTests;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,7 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
         "/config/spring-mvc.xml",
         "/config/spring-mvc-test.xml"
     })
-public abstract class TestBase extends AbstractTransactionalTestNGSpringContextTests {
+public abstract class TestBase extends AbstractTestNGSpringContextTests {
   protected final Logger logger = LogManager.getLogger(getClass());
 
   protected MockMvc mockMvc;

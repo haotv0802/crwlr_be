@@ -6,15 +6,15 @@ package crwlr.api.rest.crawling.beans;
  * @author haho
  */
 public class VendorProduct {
-  private String productName;
+  private String name;
   private String category;
 
-  public String getProductName() {
-    return productName;
+  public String getName() {
+    return name;
   }
 
-  public void setProductName(String productName) {
-    this.productName = productName;
+  public void setName(String name) {
+    this.name = name;
   }
 
   public String getCategory() {

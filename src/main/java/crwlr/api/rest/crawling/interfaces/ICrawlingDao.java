@@ -1,13 +1,12 @@
 package crwlr.api.rest.crawling.interfaces;
 
+import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProduct;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
- * Created by haho on 6/12/2017.
+ * Created by haho on 19/10/2017.
  */
 public interface ICrawlingDao {
-  void saveCrawledData(Map<String, Set<VendorProduct>> data);
+  void saveVendor(Vendor vendor);
+  void saveVendorProduct(VendorProduct product, String vendorName);
 }

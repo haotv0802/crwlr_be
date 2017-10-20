@@ -1,22 +1,21 @@
 package crwlr.api.rest.crawling;
 
+import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProduct;
 import crwlr.api.rest.crawling.interfaces.ICrawlingDao;
+import crwlr.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 /**
- * Created by haho on 6/12/2017.
+ * Created by haho on 19/10/2017.
  */
-@Repository("messagesDao")
+@Repository("crawlingDao")
 public class CrawlingDao implements ICrawlingDao {
 
   private static final Logger LOGGER = LogManager.getLogger(CrawlingDao.class);
@@ -31,74 +30,42 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void saveCrawledData(Map<String, Set<VendorProduct>> data) {
+  public void saveVendor(Vendor vendor) {
     final String sql =
-                   "SELECT                      "
-                 + "	m.message_key,            "
-                 + "	m.message_en,             "
-                 + "	m.message_fr              "
-                 + "FROM                        "
-                 + "	fm_messages m             "
-                 + "WHERE                       "
-                 + "	m.role_id is null         "
-                 + "AND m.component_name = :name"
+      "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime)"
+    + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :shipOnTime)          "
     ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", vendor.getName());
+    paramsMap.addValue("link", vendor.getLink());
+    paramsMap.addValue("location", vendor.getLocation());
+    paramsMap.addValue("positive", vendor.getPositive());
+    paramsMap.addValue("neutral", vendor.getNeutral());
+    paramsMap.addValue("negative", vendor.getNegative());
+    paramsMap.addValue("timeOnLazada", vendor.getTimeOnLazada());
+    paramsMap.addValue("rating", vendor.getRating());
+    paramsMap.addValue("size", vendor.getSize());
+    paramsMap.addValue("shipOnTime", vendor.getShipOnTime());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
   }
-//
-//  @Override
-//  public Map<String, Map<String, String>> getMessages(String language) {
-//    final String sql = "SELECT                      "
-//                     + "	m.message_key,            "
-//                     + "	m.message_en,             "
-//                     + "	m.message_fr              "
-//                     + "FROM                        "
-//                     + "	fm_messages m             "
-//                     + "WHERE                       "
-//                     + "	m.role_id is null         "
-//                     + "AND m.component_name = :name"
-//        ;
-//    List<String> componentsList = this.getComponentsList();
-//
-//    Map<String, Map<String, String>> messages = new TreeMap<>();
-//    for (String component : componentsList) {
-//      final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-//      paramsMap.addValue("name", component);
-//
-//
-//      DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-//
-//      Map<String, String> keysValuesMap = namedTemplate.query(sql, paramsMap, rs -> {
-//        Map<String, String> keysValues = new TreeMap<>();
-//
-//        while (rs.next()) {
-//          keysValues.put(
-//              rs.getString("message_key"),
-//              rs.getString("message_" + language.toLowerCase())
-//          );
-//        }
-//
-//        return keysValues;
-//      });
-//
-//      messages.put(component, keysValuesMap);
-//    }
-//
-//    return messages;
-//  }
-//
-//  private List<String> getComponentsList() {
-//    final String sql = "SELECT DISTINCT    "
-//                     + "	m.component_name "
-//                     + "FROM               "
-//                     + "	fm_messages m    "
-//                     + "WHERE              "
-//                     + "	m.role_id IS NULL"
-//        ;
-//
-//    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-//
-//    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-//
-//    return namedTemplate.queryForList(sql, paramsMap, String.class);
-//  }
+
+  @Override
+  public void saveVendorProduct(VendorProduct product, String vendorName) {
+    final String sql =
+      "INSERT INTO crwlr_products (name, category, vendor_name) "
+    + "VALUE (:name, :category, :vendor_name)                   "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", product.getName());
+    paramsMap.addValue("category", product.getCategory());
+    paramsMap.addValue("vendor_name", vendorName);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
 }

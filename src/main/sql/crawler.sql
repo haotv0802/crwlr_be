@@ -3,12 +3,12 @@ CREATE DATABASE IF NOT EXISTS `crawler_db`;
 USE `crawler_db`;
 
 --
--- Table structure for table `crwlr_products`
+-- Table structure for table `crwlr_vendors`
 --
 DROP TABLE IF EXISTS `crwlr_vendors`;
 CREATE TABLE `crwlr_vendors` (
   `id`           BIGINT AUTO_INCREMENT,
-  `name`         VARCHAR(45)  NULL,
+  `name`         VARCHAR(200) NULL,
   `location`     VARCHAR(45)  NULL,
   `positive`     TINYINT      NULL,
   `neutral`      TINYINT      NULL,
@@ -31,9 +31,9 @@ CREATE TABLE `crwlr_vendors` (
 DROP TABLE IF EXISTS `crwlr_products`;
 CREATE TABLE `crwlr_products` (
   `id`          BIGINT AUTO_INCREMENT,
-  `name`        VARCHAR(45) NOT NULL,
-  `category`    VARCHAR(45) NOT NULL,
-  `vendor_name` VARCHAR(45) NOT NULL,
+  `name`        VARCHAR(200) NOT NULL,
+  `category`    VARCHAR(45)  NOT NULL,
+  `vendor_name` VARCHAR(45)  NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_products` (`id`),
   CONSTRAINT `crwlr_products_vendor_name` FOREIGN KEY (`vendor_name`) REFERENCES `crwlr_vendors` (`name`)
