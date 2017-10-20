@@ -4,7 +4,9 @@ import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProduct;
 
 /**
- * Created by haho on 19/10/2017.
+ * Date: 10/19/2017 Time: 4:56 PM
+ *
+ * @author haho
  */
 public interface ICrawlingDao {
   void saveVendor(Vendor vendor);

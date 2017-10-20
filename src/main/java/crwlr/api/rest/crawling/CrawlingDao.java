@@ -13,7 +13,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
 /**
- * Created by haho on 19/10/2017.
+ * Date: 10/19/2017 Time: 4:56 PM
+ * The DAO is responsible for saving (ADD & UPDATE) crawled data from given pages.
+ * @author haho
  */
 @Repository("crawlingDao")
 public class CrawlingDao implements ICrawlingDao {

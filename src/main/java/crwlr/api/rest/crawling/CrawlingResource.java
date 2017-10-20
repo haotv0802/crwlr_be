@@ -19,7 +19,9 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Created by haho on 19/10/2017.
+ * Date: 10/19/2017 Time: 4:56 PM
+ *
+ * @author haho
  */
 @RestController("crawlingResource")
 @RequestMapping(path = "/svc")
@@ -49,8 +51,8 @@ public class CrawlingResource {
   ) {
     List<String> pages = new ArrayList<>();
     pages.add("https://www.lazada.sg/value-market/");
-//    pages.add("https://www.lazada.sg/empire-13");
-//    pages.add("https://www.lazada.sg/boom_");
+    pages.add("https://www.lazada.sg/empire-13");
+    pages.add("https://www.lazada.sg/boom_");
 //    pages.add("https://www.lazada.sg/the-bro-store");
 //    pages.add("https://www.lazada.sg/dotec");
 //    pages.add("https://www.lazada.sg/diotem");

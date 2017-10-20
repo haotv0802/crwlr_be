@@ -1,13 +1,11 @@
 package crwlr.api.rest.crawling.beans;
 
-import java.util.Set;
-
 /**
- * Date: 10/19/2017 Time: 5:00 PM
- * This Vendor is to be stored in Database (Not for presentation on Front-end).
+ * Date: 10/20/2017 Time: 5:00 PM
+ * This Vendor is to be presented on Front-end.
  * @author haho
  */
-public class Vendor {
+public class VendorPresenter {
   private String name;
   private String location;
   private Integer shipOnTime;
@@ -18,7 +16,6 @@ public class Vendor {
   private Integer timeOnLazada;
   private Float rating;
   private Integer size;
-  private Set<VendorProduct> products;
 
   public String getName() {
     return name;
@@ -70,10 +67,10 @@ public class Vendor {
 
   @Override
   public boolean equals(Object obj) {
-    if (!(obj instanceof Vendor)) {
+    if (!(obj instanceof VendorPresenter)) {
       return false;
     }
-    Vendor comparedVendor = (Vendor) obj;
+    VendorPresenter comparedVendor = (VendorPresenter) obj;
     if (comparedVendor.getName().equals(this.getName())) {
       return true;
     } else {
@@ -111,13 +108,5 @@ public class Vendor {
 
   public void setSize(Integer size) {
     this.size = size;
-  }
-
-  public Set<VendorProduct> getProducts() {
-    return products;
-  }
-
-  public void setProducts(Set<VendorProduct> products) {
-    this.products = products;
   }
 }
