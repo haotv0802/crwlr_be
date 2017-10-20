@@ -16,7 +16,6 @@ import crwlr.auth.encoders.MD5HalfPasswordEncoder;
 import crwlr.auth.encoders.MD5PasswordEncoder;
 import crwlr.auth.encoders.SHA1PasswordEncoder;
 import crwlr.auth.filters.*;
-import crwlr.common.HeaderLangHandlerMethodArgumentResolver;
 import crwlr.transaction.ConnectionsWatchdog;
 import crwlr.transaction.TransactionFilter;
 import crwlr.transaction.TransactionsList;
@@ -29,9 +28,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.support.ResourceBundleMessageSource;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.PageableHandlerMethodArgumentResolver;
-import org.springframework.data.web.SortHandlerMethodArgumentResolver;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -59,7 +55,6 @@ import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -151,26 +146,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     resolver.setDefaultEncoding("utf-8");
     resolver.setMaxUploadSize(1000000);
     return resolver;
-  }
-
-  /**
-   * RestControllers argument injections
-   * 1) Paging and Sorting arguments
-   * 2) HTLang arguments
-   *
-   * @param argumentResolvers list af argumentResolvers
-   */
-  @Override
-  public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
-    PageableHandlerMethodArgumentResolver resolver = new PageableHandlerMethodArgumentResolver();
-    resolver.setOneIndexedParameters(true);
-    resolver.setFallbackPageable(new PageRequest(0, 25));
-    argumentResolvers.add(resolver);
-
-    argumentResolvers.add(new SortHandlerMethodArgumentResolver());
-    argumentResolvers.add(new HeaderLangHandlerMethodArgumentResolver());
-
-    super.addArgumentResolvers(argumentResolvers);
   }
 
   @Configuration
