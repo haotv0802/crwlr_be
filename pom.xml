@@ -396,7 +396,7 @@
                 <!-- Each developer is to register in theirs own settings.xml a server with id LocalTomcat and a variable $tomcat8.manager.url-->
                 <configuration>
                     <url>${tomcat8.manager.url}</url>
-                    <port>8880</port>
+                    <port>8888</port>
                     <server>LocalTomcat8</server>
                     <path>/${project.build.finalName}</path>
                 </configuration>
@@ -422,32 +422,6 @@
                 <configuration>
                     <archiveClasses>false</archiveClasses>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.asciidoctor</groupId>
-                <artifactId>asciidoctor-maven-plugin</artifactId>
-                <version>1.5.3</version>
-                <executions>
-                    <execution>
-                        <id>generate-docs</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>process-asciidoc</goal>
-                        </goals>
-                        <configuration>
-                            <backend>html</backend>
-                            <doctype>book</doctype>
-                            <sourceDocumentName>index.adoc</sourceDocumentName>
-                            <attributes>
-                                <stylesheet>${basedir}/src/main/asciidoc/css/imx-theme.css</stylesheet>
-                                <snippets>${snippetsDirectory}</snippets>
-                                <imxClient>DONT_USE</imxClient>
-                                <imxFE>whatever</imxFE>
-                            </attributes>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
 
             <plugin>

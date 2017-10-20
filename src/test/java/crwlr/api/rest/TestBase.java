@@ -1,4 +1,4 @@
-package fm.api.rest;
+package crwlr.api.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;

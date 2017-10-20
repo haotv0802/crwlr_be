@@ -1,6 +1,6 @@
-package fm.api.rest.messages;
+package crwlr.api.rest.messages;
 
-import fm.api.rest.TestBase;
+import crwlr.api.rest.TestBase;
 import org.testng.annotations.Test;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
