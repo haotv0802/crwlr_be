@@ -16,9 +16,6 @@ import crwlr.auth.encoders.MD5HalfPasswordEncoder;
 import crwlr.auth.encoders.MD5PasswordEncoder;
 import crwlr.auth.encoders.SHA1PasswordEncoder;
 import crwlr.auth.filters.*;
-import crwlr.transaction.ConnectionsWatchdog;
-import crwlr.transaction.TransactionFilter;
-import crwlr.transaction.TransactionsList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +62,6 @@ import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Configuration
 @ComponentScan({"crwlr"})
@@ -167,22 +163,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
       return new HeaderHttpSessionStrategy();
     }
 
-  }
-
-  @Bean
-  public TransactionFilter txFilter() {
-    return new TransactionFilter();
-  }
-
-  @Bean(destroyMethod = "stop")
-  public ConnectionsWatchdog connectionsWatchdog() {
-    TransactionsList transactions = TransactionsList.getInstance();
-    ConnectionsWatchdog watcher = new ConnectionsWatchdog(TimeUnit.SECONDS.toMillis(60), transactions);
-    Thread watcherThread = new Thread(watcher);
-    watcherThread.setDaemon(true);
-    watcherThread.start();
-
-    return watcher;
   }
 
   @Bean(name = "jdbcTemplate")

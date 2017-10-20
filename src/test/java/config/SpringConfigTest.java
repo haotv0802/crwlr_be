@@ -18,7 +18,6 @@ public class SpringConfigTest {
   public MessageSource messageSource() {
     ResourceBundleMessageSource ms = new ResourceBundleMessageSource();
     ms.setBasenames(
-        "i18n.LoginResource"
     );
     ms.setUseCodeAsDefaultMessage(true);
     return ms;
@@ -27,6 +26,5 @@ public class SpringConfigTest {
   @Bean(name = "testObjectMapper")
   public ObjectMapper testObjectMapper() {
     return new ObjectMapper();
-//    return new ObjectMapper().setFilterProvider(new SimpleFilterProvider().addFilter("iMXClients", imxClientsBeanPropertyFilter));
   }
 }
