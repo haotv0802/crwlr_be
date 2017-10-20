@@ -1,7 +1,8 @@
 package crwlr.api.rest.crawling;
 
 import crwlr.api.rest.crawling.beans.Vendor;
-import crwlr.api.rest.crawling.beans.VendorProduct;
+import crwlr.api.rest.crawling.beans.VendorProductPresenter;
+import crwlr.api.rest.crawling.interfaces.ICrawledDataService;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -16,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Date: 10/19/2017 Time: 4:56 PM
@@ -27,27 +27,32 @@ import java.util.Set;
 @RequestMapping(path = "/svc")
 public class CrawlingResource {
 
-  private final Logger logger = LogManager.getLogger(getClass());
+  private final Logger LOGGER = LogManager.getLogger(getClass());
 
   private final ICrawlingService crawlingService;
 
-  private int pageLevel = 0;
+  private final ICrawledDataService crawledDataService;
 
   @Autowired
-  public CrawlingResource(@Qualifier("crawlingService") ICrawlingService crawlingService) {
+  public CrawlingResource(
+      @Qualifier("crawlingService") ICrawlingService crawlingService,
+      @Qualifier("crawledDataService") ICrawledDataService crawledDataService
+  ) {
     Assert.notNull(crawlingService);
+    Assert.notNull(crawledDataService);
 
     this.crawlingService = crawlingService;
+    this.crawledDataService = crawledDataService;
   }
 
-  @PostMapping("/crawler/crawlingData")
-  public String crawlData(
+  @GetMapping("/crawler/crawledData")
+  public List<VendorProductPresenter> getCrawledData(
   ) {
-    return "Hello";
+    return crawledDataService.getAllVendorProducts();
   }
 
-  @GetMapping("/crawler/getDataCrawled")
-  public Map<String, Vendor> getData(
+  @GetMapping("/crawler/crawlingData")
+  public Map<String, Vendor> crawlingData(
   ) {
     List<String> pages = new ArrayList<>();
     pages.add("https://www.lazada.sg/value-market/");

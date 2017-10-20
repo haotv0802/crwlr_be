@@ -12,9 +12,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CrawlingResourceTest extends TestBase {
 
   @Test
-  public void testGetDataCrawled() throws Exception {
+  public void testCrawlingData() throws Exception {
     mockMvc
-        .perform(get("/svc/crawler/getDataCrawled")
+        .perform(get("/svc/crawler/crawlingData")
+        )
+        .andExpect(status().is(200))
+    ;
+  }
+
+  @Test
+  public void testGetCrawledData() throws Exception {
+    mockMvc
+        .perform(get("/svc/crawler/crawledData")
         )
         .andExpect(status().is(200))
     ;

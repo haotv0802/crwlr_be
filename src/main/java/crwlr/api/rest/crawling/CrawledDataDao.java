@@ -35,16 +35,7 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<VendorProductPresenter> getAllVendorProducts() {
-    List<VendorPresenter> vendors = getAllVendors();
-    List<VendorProductPresenter> products = new ArrayList<>();
-    for (VendorPresenter vendor : vendors) {
-      products.addAll(getVendorProductsByVendorName(vendor));
-    }
-    return products;
-  }
-
-  private List<VendorProductPresenter> getVendorProductsByVendorName(VendorPresenter vendor) {
+  public List<VendorProductPresenter> getVendorProductsByVendorName(VendorPresenter vendor) {
     final String sql = "SELECT name, category FROM crwlr_products WHERE vendor_name = :vendorName";
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("vendorName", vendor.getName());
@@ -61,7 +52,8 @@ public class CrawledDataDao implements ICrawledDataDao {
     });
   }
 
-  private List<VendorPresenter> getAllVendors() {
+  @Override
+  public List<VendorPresenter> getAllVendors() {
     final String sql = "SELECT name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime FROM crwlr_vendors";
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
