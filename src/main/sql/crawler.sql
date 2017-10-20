@@ -31,7 +31,7 @@ CREATE TABLE `crwlr_vendors` (
 DROP TABLE IF EXISTS `crwlr_products`;
 CREATE TABLE `crwlr_products` (
   `id`          BIGINT AUTO_INCREMENT,
-  `name`        VARCHAR(200) NOT NULL,
+  `name`        VARCHAR(300) NOT NULL,
   `category`    VARCHAR(45)  NOT NULL,
   `vendor_name` VARCHAR(45)  NOT NULL,
   PRIMARY KEY (`id`),

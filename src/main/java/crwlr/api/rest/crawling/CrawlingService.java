@@ -4,6 +4,7 @@ import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProduct;
 import crwlr.api.rest.crawling.interfaces.ICrawlingDao;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -68,7 +69,7 @@ public class CrawlingService implements ICrawlingService {
       Elements productLinks = content.select("a[href]");
 
       for (Element link : productLinks) {
-        if (number++ > 5) {
+        if (number++ > 20) {
           break;
         }
         String productLink = link.attr("abs:href");
@@ -93,13 +94,13 @@ public class CrawlingService implements ICrawlingService {
 
         String rating = document.select("div.seller-rating").attr("data-tooltip-header");
         rating = rating.substring(0, rating.indexOf("/"));
-        vendor.setRating(Float.valueOf(rating));
+        vendor.setRating(StringUtils.isEmpty(rating) ? null : Float.valueOf(rating));
 
-        int timeOnLazada = Integer.valueOf(document.select(".time-on-lazada__value").get(0).text());
-        vendor.setTimeOnLazada(timeOnLazada);
+        Elements timeOnLazada = document.select(".time-on-lazada__value");
+        vendor.setTimeOnLazada(timeOnLazada.size() > 0 ? Integer.valueOf(timeOnLazada.get(0).text()) : null);
 
-        int size = Integer.valueOf(document.select(".seller-size__content").select(".seller-size-icon").attr("data-level"));
-        vendor.setSize(size);
+        String size = document.select(".seller-size__content").select(".seller-size-icon").attr("data-level");
+        vendor.setSize(StringUtils.isEmpty(size) ? null : Integer.valueOf(size));
 
         vendorMap.put(vendorName, vendor);
       }

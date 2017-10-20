@@ -58,13 +58,13 @@ public class CrawlingResource {
     pages.add("https://www.lazada.sg/value-market/");
     pages.add("https://www.lazada.sg/empire-13");
     pages.add("https://www.lazada.sg/boom_");
-//    pages.add("https://www.lazada.sg/the-bro-store");
-//    pages.add("https://www.lazada.sg/dotec");
-//    pages.add("https://www.lazada.sg/diotem");
-//    pages.add("https://www.lazada.sg/taka-jewellery1");
-//    pages.add("https://www.lazada.sg/crystalawaking");
-//    pages.add("https://www.lazada.sg/nicee-shop");
-//    pages.add("https://www.lazada.sg/itechcool");
+    pages.add("https://www.lazada.sg/the-bro-store");
+    pages.add("https://www.lazada.sg/dotec");
+    pages.add("https://www.lazada.sg/diotem");
+    pages.add("https://www.lazada.sg/taka-jewellery1");
+    pages.add("https://www.lazada.sg/crystalawaking");
+    pages.add("https://www.lazada.sg/nicee-shop");
+    pages.add("https://www.lazada.sg/itechcool");
 
     return this.crawlingService.saveCrawledData(pages);
   }
