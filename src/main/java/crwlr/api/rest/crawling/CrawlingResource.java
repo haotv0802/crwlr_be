@@ -2,7 +2,6 @@ package crwlr.api.rest.crawling;
 
 import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProductPresenter;
-import crwlr.api.rest.crawling.beans.VendorProductPresenter2;
 import crwlr.api.rest.crawling.interfaces.ICrawledDataService;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
 import org.apache.logging.log4j.LogManager;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -47,7 +45,7 @@ public class CrawlingResource {
   }
 
   @GetMapping("/crawler/crawledData")
-  public List<VendorProductPresenter2> getCrawledData(
+  public List<VendorProductPresenter> getCrawledData(
   ) {
     return crawledDataService.getAllVendorProducts();
   }

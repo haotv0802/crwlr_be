@@ -1,8 +1,6 @@
 package crwlr.api.rest.crawling;
 
-import crwlr.api.rest.crawling.beans.VendorPresenter;
 import crwlr.api.rest.crawling.beans.VendorProductPresenter;
-import crwlr.api.rest.crawling.beans.VendorProductPresenter2;
 import crwlr.api.rest.crawling.interfaces.ICrawledDataDao;
 import crwlr.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
@@ -35,49 +33,7 @@ public class CrawledDataDao implements ICrawledDataDao {
   }
 
   @Override
-  public List<VendorProductPresenter> getVendorProductsByVendorName(VendorPresenter vendor) {
-    final String sql = "SELECT name, category FROM crwlr_products WHERE vendor_name = :vendorName";
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-    paramsMap.addValue("vendorName", vendor.getName());
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      VendorProductPresenter vendorProduct = new VendorProductPresenter();
-      vendorProduct.setName(rs.getString("name"));
-      vendorProduct.setCategory(rs.getString("category"));
-      vendorProduct.setVendor(vendor);
-
-      return vendorProduct;
-    });
-  }
-
-  @Override
-  public List<VendorPresenter> getAllVendors() {
-    final String sql = "SELECT name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime FROM crwlr_vendors";
-    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
-
-    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
-
-    return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      VendorPresenter vendorPresenter = new VendorPresenter();
-      vendorPresenter.setLink(rs.getString("link"));
-      vendorPresenter.setLocation(rs.getString("location"));
-      vendorPresenter.setName(rs.getString("name"));
-      vendorPresenter.setPositive(rs.getInt("positive"));
-      vendorPresenter.setNeutral(rs.getInt("neutral"));
-      vendorPresenter.setNegative(rs.getInt("negative"));
-      vendorPresenter.setTimeOnLazada(rs.getInt("timeOnLazada"));
-      vendorPresenter.setRating(rs.getFloat("rating"));
-      vendorPresenter.setSize(rs.getInt("size"));
-      vendorPresenter.setShipOnTime(rs.getInt("shipOnTime"));
-
-      return vendorPresenter;
-    });
-  }
-
-  @Override
-  public List<VendorProductPresenter2> getAllVendorProducts() {
+  public List<VendorProductPresenter> getAllVendorProducts() {
     final String sql =
               "SELECT                                    "
             + "	p.name,                                  "
@@ -102,7 +58,7 @@ public class CrawledDataDao implements ICrawledDataDao {
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
     return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
-      VendorProductPresenter2 presenter = new VendorProductPresenter2();
+      VendorProductPresenter presenter = new VendorProductPresenter();
       presenter.setVendorLink(rs.getString("link"));
       presenter.setVendorLocation(rs.getString("location"));
       presenter.setVendorName(rs.getString("vendorName"));
