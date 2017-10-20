@@ -53,7 +53,7 @@ public class CrawlingDao implements ICrawlingDao {
   private void addVendor(Vendor vendor) {
     final String sql =
         "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime)"
-            + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :shipOnTime)          "
+      + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :shipOnTime)          "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();

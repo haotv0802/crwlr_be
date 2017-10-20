@@ -58,11 +58,6 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests {
   @Qualifier("tstMsgSource")
   private MessageSource messageSource;
 
-  public final ManualRestDocumentation restDocumentation = new ManualRestDocumentation("target/generated-snippets");
-
-  @Autowired
-  private SessionRepositoryFilter<? extends ExpiringSession> sessionRepositoryFilter;
-
   public static Locale locale = new Locale("en");
 
   @Autowired
@@ -75,29 +70,9 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests {
     mockMvc =
         MockMvcBuilders
             .webAppContextSetup(wac)
-            .addFilter(sessionRepositoryFilter)
             .addFilter(txFilter)
             .apply(springSecurity())
-            .apply(documentationConfiguration(this.restDocumentation)
-                .uris()
-                .withScheme("http")
-                .withHost(InetAddress.getLocalHost().getHostName())
-                .withPort(8080)
-                .and()
-                .snippets()
-            )
             .alwaysDo(print(printWriter))
             .build();
   }
-
-  @BeforeMethod
-  public void setUp(Method method) {
-    this.restDocumentation.beforeTest(getClass(), method.getName());
-  }
-
-  @AfterMethod
-  public void tearDown() {
-    this.restDocumentation.afterTest();
-  }
-
 }
