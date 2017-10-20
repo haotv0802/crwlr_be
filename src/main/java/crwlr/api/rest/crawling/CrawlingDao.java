@@ -31,9 +31,54 @@ public class CrawlingDao implements ICrawlingDao {
 
   @Override
   public void saveVendor(Vendor vendor) {
+    if (isVendorExisting(vendor.getName())) {
+      updateVendor(vendor);
+    } else {
+      addVendor(vendor);
+    }
+  }
+
+  private boolean isVendorExisting(String name) {
     final String sql =
-      "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime)"
-    + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :shipOnTime)          "
+        "SELECT COUNT(*) from crwlr_vendors WHERE name = :name"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", name);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+  private void addVendor(Vendor vendor) {
+    final String sql =
+        "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime)"
+            + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :shipOnTime)          "
+        ;
+
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", vendor.getName());
+    paramsMap.addValue("link", vendor.getLink());
+    paramsMap.addValue("location", vendor.getLocation());
+    paramsMap.addValue("positive", vendor.getPositive());
+    paramsMap.addValue("neutral", vendor.getNeutral());
+    paramsMap.addValue("negative", vendor.getNegative());
+    paramsMap.addValue("timeOnLazada", vendor.getTimeOnLazada());
+    paramsMap.addValue("rating", vendor.getRating());
+    paramsMap.addValue("size", vendor.getSize());
+    paramsMap.addValue("shipOnTime", vendor.getShipOnTime());
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  private void updateVendor(Vendor vendor) {
+    final String sql =
+      " UPDATE crwlr_vendors                                                                                        "
+    + "   SET location   = :location, positive = :positive, neutral = :neutral, negative = :negative, link = :link, "
+    + "    timeOnLazada = :timeOnLazada, rating = :rating, size = :size, shipOnTime = :shipOnTime                   "
+    + " WHERE name = :name                                                                                          "
     ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -53,11 +98,48 @@ public class CrawlingDao implements ICrawlingDao {
     namedTemplate.update(sql, paramsMap);
   }
 
+
   @Override
   public void saveVendorProduct(VendorProduct product, String vendorName) {
+    if (isProductExisting(product.getName(), vendorName)) {
+      updateVendorProduct(product, vendorName);
+    } else {
+      addVendorProduct(product, vendorName);
+    }
+  }
+
+  private boolean isProductExisting(String name, String vendorName) {
     final String sql =
-      "INSERT INTO crwlr_products (name, category, vendor_name) "
-    + "VALUE (:name, :category, :vendor_name)                   "
+        "SELECT COUNT(*) from crwlr_products WHERE name = :name AND vendor_name = :vendor_name"
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", name);
+    paramsMap.addValue("vendor_name", vendorName);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
+  }
+
+  private void addVendorProduct(VendorProduct product, String vendorName) {
+    final String sql =
+        "INSERT INTO crwlr_products (name, category, vendor_name) "
+            + "VALUE (:name, :category, :vendor_name)                   "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+    paramsMap.addValue("name", product.getName());
+    paramsMap.addValue("category", product.getCategory());
+    paramsMap.addValue("vendor_name", vendorName);
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    namedTemplate.update(sql, paramsMap);
+  }
+
+  private void updateVendorProduct(VendorProduct product, String vendorName) {
+    final String sql =
+        "UPDATE crwlr_products SET category = :category    "
+      + "WHERE name = :name AND vendor_name = :vendor_name "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());

@@ -40,3 +40,5 @@ CREATE TABLE `crwlr_products` (
 )
   ENGINE = InnoDB
   DEFAULT CHARSET = utf8;
+
+
