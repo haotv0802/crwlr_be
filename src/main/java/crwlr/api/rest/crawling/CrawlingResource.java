@@ -2,6 +2,7 @@ package crwlr.api.rest.crawling;
 
 import crwlr.api.rest.crawling.beans.Vendor;
 import crwlr.api.rest.crawling.beans.VendorProductPresenter;
+import crwlr.api.rest.crawling.beans.VendorProductPresenter2;
 import crwlr.api.rest.crawling.interfaces.ICrawledDataService;
 import crwlr.api.rest.crawling.interfaces.ICrawlingService;
 import org.apache.logging.log4j.LogManager;
@@ -46,7 +47,7 @@ public class CrawlingResource {
   }
 
   @GetMapping("/crawler/crawledData")
-  public List<VendorProductPresenter> getCrawledData(
+  public List<VendorProductPresenter2> getCrawledData(
   ) {
     return crawledDataService.getAllVendorProducts();
   }
