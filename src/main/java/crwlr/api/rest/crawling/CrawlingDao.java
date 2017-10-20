@@ -32,15 +32,7 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public void saveVendor(Vendor vendor) {
-    if (isVendorExisting(vendor.getName())) {
-      updateVendor(vendor);
-    } else {
-      addVendor(vendor);
-    }
-  }
-
-  private boolean isVendorExisting(String name) {
+  public boolean isVendorExisting(String name) {
     final String sql =
         "SELECT COUNT(*) from crwlr_vendors WHERE name = :name"
         ;
@@ -52,7 +44,8 @@ public class CrawlingDao implements ICrawlingDao {
     return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
   }
 
-  private void addVendor(Vendor vendor) {
+  @Override
+  public void addVendor(Vendor vendor) {
     final String sql =
         "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime)"
       + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :shipOnTime)          "
@@ -75,7 +68,8 @@ public class CrawlingDao implements ICrawlingDao {
     namedTemplate.update(sql, paramsMap);
   }
 
-  private void updateVendor(Vendor vendor) {
+  @Override
+  public void updateVendor(Vendor vendor) {
     final String sql =
       " UPDATE crwlr_vendors                                                                                        "
     + "   SET location   = :location, positive = :positive, neutral = :neutral, negative = :negative, link = :link, "
@@ -100,17 +94,8 @@ public class CrawlingDao implements ICrawlingDao {
     namedTemplate.update(sql, paramsMap);
   }
 
-
   @Override
-  public void saveVendorProduct(VendorProduct product, String vendorName) {
-    if (isProductExisting(product.getName(), vendorName)) {
-      updateVendorProduct(product, vendorName);
-    } else {
-      addVendorProduct(product, vendorName);
-    }
-  }
-
-  private boolean isProductExisting(String name, String vendorName) {
+  public boolean isProductExisting(String name, String vendorName) {
     final String sql =
         "SELECT COUNT(*) from crwlr_products WHERE name = :name AND vendor_name = :vendor_name"
         ;
@@ -123,7 +108,8 @@ public class CrawlingDao implements ICrawlingDao {
     return namedTemplate.queryForObject(sql, paramsMap, Integer.class) > 0;
   }
 
-  private void addVendorProduct(VendorProduct product, String vendorName) {
+  @Override
+  public void addVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
         "INSERT INTO crwlr_products (name, category, vendor_name) "
             + "VALUE (:name, :category, :vendor_name)                   "
@@ -138,7 +124,8 @@ public class CrawlingDao implements ICrawlingDao {
     namedTemplate.update(sql, paramsMap);
   }
 
-  private void updateVendorProduct(VendorProduct product, String vendorName) {
+  @Override
+  public void updateVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
         "UPDATE crwlr_products SET category = :category    "
       + "WHERE name = :name AND vendor_name = :vendor_name "

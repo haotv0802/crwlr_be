@@ -9,6 +9,15 @@ import crwlr.api.rest.crawling.beans.VendorProduct;
  * @author haho
  */
 public interface ICrawlingDao {
-  void saveVendor(Vendor vendor);
-  void saveVendorProduct(VendorProduct product, String vendorName);
+  boolean isVendorExisting(String name);
+
+  void addVendor(Vendor vendor);
+
+  void updateVendor(Vendor vendor);
+
+  boolean isProductExisting(String name, String vendorName);
+
+  void addVendorProduct(VendorProduct product, String vendorName);
+
+  void updateVendorProduct(VendorProduct product, String vendorName);
 }

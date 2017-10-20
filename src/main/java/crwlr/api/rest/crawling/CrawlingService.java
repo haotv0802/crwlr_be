@@ -49,16 +49,32 @@ public class CrawlingService implements ICrawlingService {
     Set<String> keys = vendorMap.keySet();
     for (String key : keys) {
       Vendor vendor = vendorMap.get(key);
-      crawlingDao.saveVendor(vendor);
+
+      // Saving vendor
+      if (crawlingDao.isVendorExisting(vendor.getName())) {
+        crawlingDao.updateVendor(vendor);
+      } else {
+        crawlingDao.addVendor(vendor);
+      }
 
       Set<VendorProduct> products = vendor.getProducts();
       for (VendorProduct product: products) {
-        crawlingDao.saveVendorProduct(product, vendor.getName());
+
+        // Saving Product
+        if (crawlingDao.isProductExisting(product.getName(), vendor.getName())) {
+          crawlingDao.updateVendorProduct(product, vendor.getName());
+        } else {
+          crawlingDao.addVendorProduct(product, vendor.getName());
+        }
       }
     }
     return vendorMap;
   }
 
+  /**
+   * Get list of products from given Vendor.
+   * @param vendorLink
+   */
   private void getVendorProduct(String vendorLink) {
     int number = 0;
     try {
@@ -81,6 +97,10 @@ public class CrawlingService implements ICrawlingService {
     }
   }
 
+  /**
+   * Get product details
+   * @param productLink
+   */
   private void getProductDetails(String productLink) {
     try {
       Document document = Jsoup.connect(productLink).get();
