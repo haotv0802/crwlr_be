@@ -1,4 +1,4 @@
-package crwlr.api.rest.messages;
+package crwlr.api.rest.crwlr;
 
 import crwlr.api.rest.TestBase;
 import org.testng.annotations.Test;
