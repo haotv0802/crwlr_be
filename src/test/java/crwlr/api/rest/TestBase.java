@@ -38,10 +38,6 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests {
   protected MockMvc mockMvc;
 
   @Autowired
-  @Qualifier("testObjectMapper")
-  protected ObjectMapper objectMapper;
-
-  @Autowired
   private WebApplicationContext wac;
 
   @Autowired
@@ -57,7 +53,6 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests {
     mockMvc =
         MockMvcBuilders
             .webAppContextSetup(wac)
-            .apply(springSecurity())
             .alwaysDo(print(printWriter))
             .build();
   }
