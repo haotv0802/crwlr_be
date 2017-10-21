@@ -12,6 +12,8 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import java.util.Date;
+
 /**
  * Date: 10/19/2017 Time: 4:56 PM
  * The DAO is responsible for saving (ADD & UPDATE) crawled data from given pages.
@@ -71,10 +73,10 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateVendor(Vendor vendor) {
     final String sql =
-      " UPDATE crwlr_vendors                                                                                        "
-    + "   SET location   = :location, positive = :positive, neutral = :neutral, negative = :negative, link = :link, "
-    + "    timeOnLazada = :timeOnLazada, rating = :rating, size = :size, shipOnTime = :shipOnTime                   "
-    + " WHERE name = :name                                                                                          "
+      " UPDATE crwlr_vendors                                                                                         "
+    + "   SET location   = :location, positive = :positive, neutral = :neutral, negative = :negative, link = :link,  "
+    + "    timeOnLazada = :timeOnLazada, rating = :rating, size = :size, shipOnTime = :shipOnTime, updated = :updated"
+    + " WHERE name = :name                                                                                           "
     ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -88,6 +90,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("rating", vendor.getRating());
     paramsMap.addValue("size", vendor.getSize());
     paramsMap.addValue("shipOnTime", vendor.getShipOnTime());
+    paramsMap.addValue("updated", new Date());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -111,13 +114,14 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
-        "INSERT INTO crwlr_products (name, category, vendor_name) "
-            + "VALUE (:name, :category, :vendor_name)                   "
+              "INSERT INTO crwlr_products (name, category, vendor_name, link)  "
+            + "VALUE (:name, :category, :vendor_name, :link)                   "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());
     paramsMap.addValue("category", product.getCategory());
     paramsMap.addValue("vendor_name", vendorName);
+    paramsMap.addValue("link", product.getLink());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -127,13 +131,15 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
-        "UPDATE crwlr_products SET category = :category    "
-      + "WHERE name = :name AND vendor_name = :vendor_name "
+        "UPDATE crwlr_products SET category = :category, updated = :updated, link = :link"
+      + " WHERE name = :name AND vendor_name = :vendor_name                              "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());
     paramsMap.addValue("category", product.getCategory());
     paramsMap.addValue("vendor_name", vendorName);
+    paramsMap.addValue("updated", new Date());
+    paramsMap.addValue("link", product.getLink());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

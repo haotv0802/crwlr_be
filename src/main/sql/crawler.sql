@@ -7,7 +7,7 @@ USE `crawler_db`;
 --
 DROP TABLE IF EXISTS `crwlr_vendors`;
 CREATE TABLE `crwlr_vendors` (
-  `id`           BIGINT AUTO_INCREMENT,
+  `id`           BIGINT   AUTO_INCREMENT,
   `name`         VARCHAR(200) NULL,
   `location`     VARCHAR(45)  NULL,
   `positive`     TINYINT      NULL,
@@ -17,7 +17,9 @@ CREATE TABLE `crwlr_vendors` (
   `timeOnLazada` TINYINT      NULL,
   `rating`       DECIMAL      NULL,
   `size`         TINYINT      NULL,
-  `shipOnTime`   TINYINT      NULL,
+  `shipOnTime`   DECIMAL      NULL,
+  `created`      DATETIME DEFAULT NOW(),
+  `updated`      DATETIME     NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_vendors_id` (`id`),
   UNIQUE KEY `crwlr_vendors_name` (`name`)
@@ -30,10 +32,13 @@ CREATE TABLE `crwlr_vendors` (
 --
 DROP TABLE IF EXISTS `crwlr_products`;
 CREATE TABLE `crwlr_products` (
-  `id`          BIGINT AUTO_INCREMENT,
+  `id`          BIGINT   AUTO_INCREMENT,
   `name`        VARCHAR(300) NOT NULL,
   `category`    VARCHAR(45)  NOT NULL,
   `vendor_name` VARCHAR(45)  NOT NULL,
+  `link`        VARCHAR(200) NULL,
+  `created`     DATETIME DEFAULT NOW(),
+  `updated`     DATETIME     NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_products` (`id`),
   CONSTRAINT `crwlr_products_vendor_name` FOREIGN KEY (`vendor_name`) REFERENCES `crwlr_vendors` (`name`)

@@ -1,22 +1,25 @@
 package crwlr.api.rest.crawling.beans;
 
+import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Set;
 
 /**
  * Date: 10/19/2017 Time: 5:00 PM
  * This Vendor is to be stored in Database (Not for presentation on Front-end).
+ *
  * @author haho
  */
 public class Vendor {
   private String name;
   private String location;
-  private Integer shipOnTime;
+  private Double shipOnTime;
   private Integer positive;
   private Integer neutral;
   private Integer negative;
   private String link;
   private Integer timeOnLazada;
-  private Float rating;
+  private Double rating;
   private Integer size;
   private Set<VendorProduct> products;
 
@@ -36,11 +39,11 @@ public class Vendor {
     this.location = location;
   }
 
-  public Integer getShipOnTime() {
+  public Double getShipOnTime() {
     return shipOnTime;
   }
 
-  public void setShipOnTime(Integer shipOnTime) {
+  public void setShipOnTime(Double shipOnTime) {
     this.shipOnTime = shipOnTime;
   }
 
@@ -97,11 +100,11 @@ public class Vendor {
     this.timeOnLazada = timeOnLazada;
   }
 
-  public Float getRating() {
+  public Double getRating() {
     return rating;
   }
 
-  public void setRating(Float rating) {
+  public void setRating(Double rating) {
     this.rating = rating;
   }
 

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -34,9 +35,9 @@ public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
 
-  private Map<String, Vendor> vendorMap = new HashMap<>();
+//  private Map<String, Vendor> vendorMap = new HashMap<>();
 
-  private final Logger logger = LogManager.getLogger(getClass());
+  private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
   public CrawlingService(@Qualifier("crawlingDao") ICrawlingDao crawlingDao) {
@@ -47,8 +48,9 @@ public class CrawlingService implements ICrawlingService {
 
   @Override
   public Map<String, Vendor> saveCrawledData(List<String> pages) {
+    Map<String, Vendor> vendorMap = new HashMap<>();
     for (String page : pages) {
-      getVendorProduct(page);
+      getVendorProduct(page, vendorMap);
     }
 
     Set<String> keys = vendorMap.keySet();
@@ -80,7 +82,7 @@ public class CrawlingService implements ICrawlingService {
    * Get list of products from given Vendor.
    * @param vendorLink
    */
-  private void getVendorProduct(String vendorLink) {
+  private void getVendorProduct(String vendorLink, Map<String, Vendor> vendorMap) {
     int number = 0;
     try {
       Document document = Jsoup.connect(vendorLink).get();
@@ -88,34 +90,21 @@ public class CrawlingService implements ICrawlingService {
       Elements content = document.select(".c-product-list");
 
       String sellerId = document.select("body").attr("data-spm");
-      if (!StringUtils.isEmpty(sellerId)) {
-        sellerId = sellerId.substring(sellerId.indexOf("-") + 1);
-        try {
-          JSONObject json = new JSONObject(
-              IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=" + sellerId),
-                  Charset.forName("UTF-8")));
-          JSONObject seller = (JSONObject) json.get("seller");
-          String location = seller.getString("location");
-          String shipOnTime = seller.getJSONObject("shipped_on_time").getString("average_rate");
-          String positive = seller.getJSONObject("seller_reviews").getJSONObject("positive").getString("total");
-          String negative = seller.getJSONObject("seller_reviews").getJSONObject("negative").getString("total");
-          String neutral = seller.getJSONObject("seller_reviews").getJSONObject("neutral").getString("total");
-          String timeOnLazada = seller.getJSONObject("time_on_lazada").getString("months");
-          String sellerSize = seller.getString("size");
-          String rating = seller.getString("rate");
-        } catch (JSONException e) {
-          e.printStackTrace();
-        }
+
+      Vendor vendor = getVendorDetails(sellerId, vendorLink, vendorMap);
+
+      if (null == vendor) {
+        return;
       }
 
       Elements productLinks = content.select("a[href]");
 
       for (Element link : productLinks) {
-        if (number++ > 20) {
+        if (number++ > 2) {
           break;
         }
         String productLink = link.attr("abs:href");
-        getProductDetails(productLink);
+        getProductDetails(productLink, vendor);
       }
 
     } catch (IOException e) {
@@ -124,38 +113,74 @@ public class CrawlingService implements ICrawlingService {
   }
 
   /**
-   * Get product details
-   * @param productLink
+   *
+   * @param sellerId
+   * @param vendorLink
+   * @param vendorMap
+   * @return
    */
-  private void getProductDetails(String productLink) {
+  private Vendor getVendorDetails(String sellerId, String vendorLink, Map<String, Vendor> vendorMap) {
+    Vendor vendor = null;
+    if (!StringUtils.isEmpty(sellerId)) {
+      sellerId = sellerId.substring(sellerId.indexOf("-") + 1);
+      try {
+        JSONObject json = new JSONObject(
+            IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=" + sellerId),
+                Charset.forName("UTF-8")));
+        JSONObject seller = (JSONObject) json.get("seller");
+        String name = seller.getString("name");
+        vendor = vendorMap.get(name);
+        if (null == vendor) {
+          vendor = new Vendor();
+          vendorMap.put(name, vendor);
+        }
+        String location = seller.getString("location");
+        String shipOnTime = seller.getJSONObject("shipped_on_time").getString("average_rate");
+        String positive = seller.getJSONObject("seller_reviews").getJSONObject("positive").getString("total");
+        String negative = seller.getJSONObject("seller_reviews").getJSONObject("negative").getString("total");
+        String neutral = seller.getJSONObject("seller_reviews").getJSONObject("neutral").getString("total");
+        String timeOnLazada = seller.getJSONObject("time_on_lazada").getString("months");
+        String sellerSize = seller.getString("size");
+        String rating = seller.getString("rate");
+
+        vendor.setName(name);
+        vendor.setLocation(location);
+        vendor.setShipOnTime(Double.valueOf(shipOnTime));
+        vendor.setPositive(StringUtils.isEmpty(positive) ? null : Integer.valueOf(positive));
+        vendor.setNegative(StringUtils.isEmpty(negative) ? null : Integer.valueOf(negative));
+        vendor.setNeutral(StringUtils.isEmpty(neutral) ? null : Integer.valueOf(neutral));
+        vendor.setTimeOnLazada(StringUtils.isEmpty(timeOnLazada) ? null : Integer.valueOf(timeOnLazada));
+        vendor.setSize(StringUtils.isEmpty(sellerSize) ? null : Integer.valueOf(sellerSize));
+        vendor.setRating(StringUtils.isEmpty(rating) ? null : Double.valueOf(rating));
+        vendor.setLink(vendorLink);
+      } catch (JSONException | IOException e) {
+        e.printStackTrace();
+        return null;
+      }
+    }
+    return vendor;
+  }
+
+  /**
+   *
+   * @param productLink
+   * @param vendor
+   */
+  private void getProductDetails(String productLink, Vendor vendor) {
     try {
       Document document = Jsoup.connect(productLink).get();
 
-      String vendorName = document.select(".basic-info__name").get(0).text();
-
-      Vendor vendor = vendorMap.get(vendorName);
-      if (null == vendor) {
-        vendor = new Vendor();
-        vendor.setName(vendorName);
-
-        String rating = document.select("div.seller-rating").attr("data-tooltip-header");
-        rating = rating.substring(0, rating.indexOf("/"));
-        vendor.setRating(StringUtils.isEmpty(rating) ? null : Float.valueOf(rating));
-
-        Elements timeOnLazada = document.select(".time-on-lazada__value");
-        vendor.setTimeOnLazada(timeOnLazada.size() > 0 ? Integer.valueOf(timeOnLazada.get(0).text()) : null);
-
-        String size = document.select(".seller-size__content").select(".seller-size-icon").attr("data-level");
-        vendor.setSize(StringUtils.isEmpty(size) ? null : Integer.valueOf(size));
-
-        vendorMap.put(vendorName, vendor);
-      }
-
       VendorProduct vendorProduct = new VendorProduct();
       String productName = document.select("#prod_title").text();
+      Elements categories = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]");
+      String category = null;
+      if (null != categories && categories.size() > 0) {
+        category = categories.get(0).select("span").text();
+      }
+
       vendorProduct.setName(productName);
-      String category = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]").get(0).select("span").text();
       vendorProduct.setCategory(category);
+      vendorProduct.setLink(productLink);
 
       Set<VendorProduct> products = vendor.getProducts();
       if (null == products) {
@@ -163,7 +188,6 @@ public class CrawlingService implements ICrawlingService {
         vendor.setProducts(products);
       }
       products.add(vendorProduct);
-
 
     } catch (IOException e) {
       System.err.println("For '" + productLink + "': " + e.getMessage());
