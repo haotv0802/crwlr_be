@@ -1,5 +1,6 @@
 package crwlr.api.rest.crawling.interfaces;
 
+import crwlr.api.rest.crawling.beans.VendorPresenter;
 import crwlr.api.rest.crawling.beans.VendorProductPresenter;
 
 import java.util.List;
@@ -11,4 +12,6 @@ import java.util.List;
  */
 public interface ICrawledDataDao {
   List<VendorProductPresenter> getAllVendorProducts();
+
+  List<VendorPresenter> getAllVendors();
 }

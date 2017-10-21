@@ -259,6 +259,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
           .antMatchers(HttpMethod.POST, "/svc/login").permitAll()
           .antMatchers(HttpMethod.GET, "/svc/crawler/crawlingData").permitAll()
           .antMatchers(HttpMethod.GET, "/svc/crawler/crawledData").permitAll()
+          .antMatchers(HttpMethod.GET, "/svc/crawler/vendors").permitAll()
           //all other request need to be authenticated
           .antMatchers("/svc/**").authenticated()
           .and()

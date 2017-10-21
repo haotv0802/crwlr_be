@@ -1,5 +1,6 @@
 package crwlr.api.rest.crawling;
 
+import crwlr.api.rest.crawling.beans.VendorPresenter;
 import crwlr.api.rest.crawling.beans.VendorProductPresenter;
 import crwlr.api.rest.crawling.interfaces.ICrawledDataDao;
 import crwlr.api.rest.crawling.interfaces.ICrawledDataService;
@@ -34,5 +35,10 @@ public class CrawledDataService implements ICrawledDataService {
   @Override
   public List<VendorProductPresenter> getAllVendorProducts() {
     return this.crawledDataDao.getAllVendorProducts();
+  }
+
+  @Override
+  public List<VendorPresenter> getAllVendors() {
+    return crawledDataDao.getAllVendors();
   }
 }

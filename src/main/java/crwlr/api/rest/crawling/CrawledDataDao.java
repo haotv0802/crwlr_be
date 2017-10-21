@@ -1,16 +1,20 @@
 package crwlr.api.rest.crawling;
 
+import crwlr.api.rest.crawling.beans.VendorPresenter;
 import crwlr.api.rest.crawling.beans.VendorProductPresenter;
 import crwlr.api.rest.crawling.interfaces.ICrawledDataDao;
 import crwlr.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -72,6 +76,28 @@ public class CrawledDataDao implements ICrawledDataDao {
       presenter.setVendorShipOnTime(rs.getInt("shipOnTime"));
       presenter.setName(rs.getString("name"));
       presenter.setCategory(rs.getString("category"));
+      return presenter;
+    });
+  }
+
+  @Override
+  public List<VendorPresenter> getAllVendors() {
+    final String sql =
+              "SELECT                                 "
+            + "	name, timeOnLazada, shipOnTime, size  "
+            + "FROM                                   "
+            + "	crwlr_vendors                         "
+        ;
+    final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
+
+    DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
+
+    return namedTemplate.query(sql, paramsMap, (rs, rowNum) -> {
+      VendorPresenter presenter = new VendorPresenter();
+      presenter.setName(rs.getString("name"));
+      presenter.setTimeOnLazada(rs.getInt("timeOnLazada"));
+      presenter.setShipOnTime(rs.getDouble("shipOnTime"));
+      presenter.setSize(rs.getInt("size"));
       return presenter;
     });
   }

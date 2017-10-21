@@ -89,7 +89,7 @@ public class CrawlingService implements ICrawlingService {
 
       String sellerId = document.select("body").attr("data-spm");
 
-      LOGGER.info(">>> Vendor Link: " + vendorLink);
+      LOGGER.info(">>> Crawling vendor data: " + vendorLink);
       Vendor vendor = getVendorDetails(sellerId, vendorLink, vendorMap);
 
       Elements productLinks = content.select("a[href]");
