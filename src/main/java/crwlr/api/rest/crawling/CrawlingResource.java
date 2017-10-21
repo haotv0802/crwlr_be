@@ -10,8 +10,10 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
@@ -53,19 +55,25 @@ public class CrawlingResource {
 
   @GetMapping("/crawler/crawlingData")
   public Map<String, Vendor> crawlingData(
+      @RequestParam(value = "link", required = false) String link,
+      @RequestParam(value = "numberOfProductsCrawled", defaultValue = "5", required = false) Integer numberOfProductsCrawled
   ) {
     List<String> pages = new ArrayList<>();
-    pages.add("https://www.lazada.sg/value-market/");
-    pages.add("https://www.lazada.sg/empire-13");
-    pages.add("https://www.lazada.sg/boom_");
-    pages.add("https://www.lazada.sg/the-bro-store");
-    pages.add("https://www.lazada.sg/taka-jewellery1");
-    pages.add("https://www.lazada.sg/crystalawaking");
-    pages.add("https://www.lazada.sg/nicee-shop");
-    pages.add("https://www.lazada.sg/itechcool");
-    pages.add("https://www.lazada.sg/selffix-pte-ltd");
-    pages.add("https://www.lazada.sg/originalfook");
-    return this.crawlingService.saveCrawledData(pages);
+    if (StringUtils.isEmpty(link)) {
+      pages.add("https://www.lazada.sg/value-market");
+      pages.add("https://www.lazada.sg/empire-13");
+      pages.add("https://www.lazada.sg/boom_");
+      pages.add("https://www.lazada.sg/the-bro-store");
+      pages.add("https://www.lazada.sg/taka-jewellery1");
+      pages.add("https://www.lazada.sg/crystalawaking");
+      pages.add("https://www.lazada.sg/nicee-shop");
+      pages.add("https://www.lazada.sg/itechcool");
+      pages.add("https://www.lazada.sg/selffix-pte-ltd");
+      pages.add("https://www.lazada.sg/originalfook");
+    } else {
+      pages.add(link);
+    }
+    return this.crawlingService.saveCrawledData(pages, numberOfProductsCrawled);
   }
 
   @GetMapping("/crawler/vendors")
