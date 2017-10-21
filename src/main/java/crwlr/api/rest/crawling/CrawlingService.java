@@ -35,8 +35,6 @@ public class CrawlingService implements ICrawlingService {
 
   private final ICrawlingDao crawlingDao;
 
-//  private Map<String, Vendor> vendorMap = new HashMap<>();
-
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
   @Autowired
@@ -91,11 +89,8 @@ public class CrawlingService implements ICrawlingService {
 
       String sellerId = document.select("body").attr("data-spm");
 
+      LOGGER.info(">>> Vendor Link: " + vendorLink);
       Vendor vendor = getVendorDetails(sellerId, vendorLink, vendorMap);
-
-      if (null == vendor) {
-        return;
-      }
 
       Elements productLinks = content.select("a[href]");
 
@@ -104,7 +99,11 @@ public class CrawlingService implements ICrawlingService {
           break;
         }
         String productLink = link.attr("abs:href");
-        getProductDetails(productLink, vendor);
+        if (null == vendor) {
+          getProductDetails(productLink, vendorMap);
+        } else {
+          getProductDetails(productLink, vendor);
+        }
       }
 
     } catch (IOException e) {
@@ -161,11 +160,55 @@ public class CrawlingService implements ICrawlingService {
     return vendor;
   }
 
-  /**
-   *
-   * @param productLink
-   * @param vendor
-   */
+  private void getProductDetails(String productLink, Map<String, Vendor> vendorMap) {
+    try {
+      Document document = Jsoup.connect(productLink).get();
+
+
+      String vendorName = document.select(".basic-info__name").get(0).text();
+
+      Vendor vendor = vendorMap.get(vendorName);
+      if (null == vendor) {
+        vendor = new Vendor();
+        vendor.setName(vendorName);
+
+        String rating = document.select("div.seller-rating").attr("data-tooltip-header");
+        rating = rating.substring(0, rating.indexOf("/"));
+        vendor.setRating(StringUtils.isEmpty(rating) ? null : Double.valueOf(rating));
+
+        Elements timeOnLazada = document.select(".time-on-lazada__value");
+        vendor.setTimeOnLazada(timeOnLazada.size() > 0 ? Integer.valueOf(timeOnLazada.get(0).text()) : null);
+
+        String size = document.select(".seller-size__content").select(".seller-size-icon").attr("data-level");
+        vendor.setSize(StringUtils.isEmpty(size) ? null : Integer.valueOf(size));
+
+        vendorMap.put(vendorName, vendor);
+      }
+
+      VendorProduct vendorProduct = new VendorProduct();
+      String productName = document.select("#prod_title").text();
+      Elements categories = document.select(".breadcrumb__list").select(".breadcrumb__item-text").select("a[title]");
+      String category = null;
+      if (null != categories && categories.size() > 0) {
+        category = categories.get(0).select("span").text();
+      }
+
+      vendorProduct.setName(productName);
+      vendorProduct.setCategory(category);
+      vendorProduct.setLink(productLink);
+
+      Set<VendorProduct> products = vendor.getProducts();
+      if (null == products) {
+        products = new HashSet<>();
+        vendor.setProducts(products);
+      }
+      products.add(vendorProduct);
+
+    } catch (IOException e) {
+      System.err.println("For '" + productLink + "': " + e.getMessage());
+    }
+  }
+
   private void getProductDetails(String productLink, Vendor vendor) {
     try {
       Document document = Jsoup.connect(productLink).get();
