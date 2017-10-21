@@ -95,7 +95,7 @@ public class CrawlingService implements ICrawlingService {
       Elements productLinks = content.select("a[href]");
 
       for (Element link : productLinks) {
-        if (number++ > 2) {
+        if (number++ > 100) {
           break;
         }
         String productLink = link.attr("abs:href");

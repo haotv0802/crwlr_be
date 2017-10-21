@@ -52,6 +52,7 @@ public class CrawledDataDao implements ICrawledDataDao {
             + "	crwlr_products p                         "
             + "		INNER JOIN                             "
             + "	crwlr_vendors v ON p.vendor_name = v.name"
+            + "	ORDER BY p.name ASC                      "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
 
