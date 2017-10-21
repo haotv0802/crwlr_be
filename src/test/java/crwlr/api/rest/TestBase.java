@@ -40,12 +40,6 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests {
   @Autowired
   private WebApplicationContext wac;
 
-  @Autowired
-  @Qualifier("tstMsgSource")
-  private MessageSource messageSource;
-
-  public static Locale locale = new Locale("en");
-
   @BeforeClass
   public void setup() throws UnknownHostException {
     final PrintWriter printWriter = IoBuilder.forLogger(logger).buildPrintWriter();
