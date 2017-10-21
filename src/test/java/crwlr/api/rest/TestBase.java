@@ -29,8 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 @WebAppConfiguration
 @ContextConfiguration(
     locations = {
-        "/config/spring-mvc.xml",
-        "/config/spring-mvc-test.xml"
+        "/config/spring-mvc.xml"
     })
 public abstract class TestBase extends AbstractTestNGSpringContextTests {
   protected final Logger logger = LogManager.getLogger(getClass());
