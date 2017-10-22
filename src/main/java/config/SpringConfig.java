@@ -93,16 +93,10 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     return new TransactionTemplate(txManager());
   }
 
-
   @Override
   public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
     configurer.defaultContentType(MediaType.APPLICATION_JSON);
   }
-
-  /**
-   * ").allowCredentials(true).exposedHeaders("Location");
-   * }
-   */
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
