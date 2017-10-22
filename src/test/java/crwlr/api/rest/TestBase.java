@@ -42,7 +42,6 @@ public abstract class TestBase extends AbstractTestNGSpringContextTests {
     mockMvc =
         MockMvcBuilders
             .webAppContextSetup(wac)
-            .apply(springSecurity())
             .alwaysDo(print(printWriter))
             .build();
   }
