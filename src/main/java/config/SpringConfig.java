@@ -103,15 +103,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
     super.addInterceptors(registry);
   }
 
-
-  @Bean(name = "multipartResolver")
-  public CommonsMultipartResolver createMultipartResolver() {
-    CommonsMultipartResolver resolver = new CommonsMultipartResolver();
-    resolver.setDefaultEncoding("utf-8");
-    resolver.setMaxUploadSize(1000000);
-    return resolver;
-  }
-
   @Configuration
   @EnableHazelcastHttpSession(maxInactiveIntervalInSeconds = (int) sessionTimeoutInSec, sessionMapName = "spring:session:sessions")
   protected static class SessionConfig {
