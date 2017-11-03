@@ -69,7 +69,7 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
   @Bean(name = "dataSource")
   public DataSource dataSource() throws SQLException {
     final String databaseUrl = "jdbc:mysql://localhost:3306/crawler_db";
-    final String usr = "haho";
+    final String usr = "root";
     final String pass = "hoanhhao";
 
     log.debug("databaseUrl=={}", databaseUrl);
@@ -134,4 +134,6 @@ public class SpringConfig extends WebMvcConfigurerAdapter {
       throws SQLException {
     return new NamedParameterJdbcTemplate(dataSource());
   }
+
+
 }
