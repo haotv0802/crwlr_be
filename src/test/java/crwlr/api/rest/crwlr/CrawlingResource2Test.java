@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 /**
  * Created by haho on 19/10/2017.
  */
-public class CrawlingResourceTest extends TestBase {
+public class CrawlingResource2Test extends TestBase {
 
   @Test
   public void testCrawlingData() throws Exception {

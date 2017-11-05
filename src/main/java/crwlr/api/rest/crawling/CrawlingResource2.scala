@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Requ
 @RestController("crawlingResource")
 @ComponentScan
 @RequestMapping(path = Array("/svc"))
-class CrawlingResource(
+class CrawlingResource2(
                    @Autowired val crawlingService: ICrawlingService,
                    @Autowired val crawledService: ICrawledDataService
                  ) {
@@ -57,7 +57,7 @@ class CrawlingResource(
   }
 }
 
-object CrawlingResource {
+object CrawlingResource2 {
   def main(args: Array[String]) {
     println("Hello, world!")
   }
