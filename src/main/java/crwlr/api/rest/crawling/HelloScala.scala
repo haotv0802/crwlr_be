@@ -15,8 +15,7 @@ import org.springframework.util.StringUtils
 import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, RequestParam, RestController}
 
 @RestController("crawlingResource")
-@ComponentScan
-@RequestMapping(path = Array("/svc"))
+@RequestMapping(Array("/svc"))
 class HelloScala(
                    @Autowired val crawlingService: ICrawlingService,
                    @Autowired val crawledService: ICrawledDataService
