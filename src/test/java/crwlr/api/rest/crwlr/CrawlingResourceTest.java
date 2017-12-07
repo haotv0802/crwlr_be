@@ -15,8 +15,8 @@ public class CrawlingResourceTest extends TestBase {
   public void testCrawlingData() throws Exception {
     mockMvc
         .perform(get("/svc/crawler/crawlingData")
-//            .param("link", "https://www.lazada.sg/eggtually/")
-            .param("numberOfProductsCrawled", "2")
+//            .param("link", "https://www.lazada.sg/empire-13")
+            .param("numberOfProductsCrawled", "100")
         )
         .andExpect(status().is(200))
     ;

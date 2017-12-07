@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -92,7 +91,11 @@ public class CrawlingService implements ICrawlingService {
 
       Elements content = document.select(".c-product-list");
 
-      String sellerId = document.select("body").attr("data-spm");
+//      String sellerId = document.select("body").attr("data-spm");
+      JSONObject jsonObject = new JSONObject(document.select("div.c-header-search").attr("data-js-component-params").toString());
+      jsonObject.getJSONObject("searchContext");
+
+      String sellerId = jsonObject.getJSONObject("searchContext").get("EntityID").toString();
 
       LOGGER.info(">>> Crawling vendor data: " + vendorLink);
       Vendor vendor = getVendorDetails(sellerId, vendorLink, vendorMap);
@@ -113,6 +116,8 @@ public class CrawlingService implements ICrawlingService {
 
     } catch (IOException e) {
       System.err.println("For '" + vendorLink + "': " + e.getMessage());
+    } catch (JSONException e) {
+      e.printStackTrace();
     }
   }
 
