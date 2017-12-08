@@ -49,8 +49,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addVendor(Vendor vendor) {
     final String sql =
-        "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, shipOnTime)"
-      + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :shipOnTime)          "
+        "INSERT INTO crwlr_vendors (name, location, positive, neutral, negative, link, timeOnLazada, rating, size, mainCategory, shipOnTime)"
+      + "VALUE (:name, :location, :positive, :neutral, :negative, :link, :timeOnLazada, :rating, :size, :mainCategory, :shipOnTime)         "
         ;
 
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
@@ -63,6 +63,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("timeOnLazada", vendor.getTimeOnLazada());
     paramsMap.addValue("rating", vendor.getRating());
     paramsMap.addValue("size", vendor.getSize());
+    paramsMap.addValue("mainCategory", vendor.getMainCategory());
     paramsMap.addValue("shipOnTime", vendor.getShipOnTime());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
@@ -75,7 +76,8 @@ public class CrawlingDao implements ICrawlingDao {
     final String sql =
       " UPDATE crwlr_vendors                                                                                         "
     + "   SET location   = :location, positive = :positive, neutral = :neutral, negative = :negative, link = :link,  "
-    + "    timeOnLazada = :timeOnLazada, rating = :rating, size = :size, shipOnTime = :shipOnTime, updated = :updated"
+    + "    timeOnLazada = :timeOnLazada, rating = :rating, size = :size, mainCategory = :mainCategory,               "
+    + "    shipOnTime = :shipOnTime, updated = :updated                                                              "
     + " WHERE name = :name                                                                                           "
     ;
 
@@ -89,6 +91,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("timeOnLazada", vendor.getTimeOnLazada());
     paramsMap.addValue("rating", vendor.getRating());
     paramsMap.addValue("size", vendor.getSize());
+    paramsMap.addValue("mainCategory", vendor.getMainCategory());
     paramsMap.addValue("shipOnTime", vendor.getShipOnTime());
     paramsMap.addValue("updated", new Date());
 

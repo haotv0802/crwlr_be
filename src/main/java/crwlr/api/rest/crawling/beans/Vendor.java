@@ -18,6 +18,7 @@ public class Vendor {
   private Integer neutral;
   private Integer negative;
   private String link;
+  private String mainCategory;
   private Integer timeOnLazada;
   private Double rating;
   private Integer size;
@@ -122,5 +123,13 @@ public class Vendor {
 
   public void setProducts(Set<VendorProduct> products) {
     this.products = products;
+  }
+
+  public String getMainCategory() {
+    return mainCategory;
+  }
+
+  public void setMainCategory(String mainCategory) {
+    this.mainCategory = mainCategory;
   }
 }

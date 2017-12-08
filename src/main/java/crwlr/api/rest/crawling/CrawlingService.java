@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
@@ -71,11 +72,14 @@ public class CrawlingService implements ICrawlingService {
       for (VendorProduct product: products) {
 
         // Saving Product
-        if (crawlingDao.isProductExisting(product.getName(), vendor.getName())) {
-          crawlingDao.updateVendorProduct(product, vendor.getName());
-        } else {
+//        if (crawlingDao.isProductExisting(product.getName(), vendor.getName())) {
+//          crawlingDao.updateVendorProduct(product, vendor.getName());
+//        } else {
+//          crawlingDao.addVendorProduct(product, vendor.getName());
+//        }
+
+        // Saving Product -- products can display more than 1 time.
           crawlingDao.addVendorProduct(product, vendor.getName());
-        }
       }
     }
     return vendorMap;
@@ -105,26 +109,52 @@ public class CrawlingService implements ICrawlingService {
       // ********** Get list of products info
       Elements content = document.select(".c-product-list");
 
-      Elements productLinks = content.select("a[href]");
+      // Vendor like "value-market" has ".c-product-list", the other like the-bro-store uses REST API to get products list.
+      if (content.size() != 0) {
+        Elements productLinks = content.select("a[href]");
 
-      for (Element link : productLinks) {
-        if (numberOfProductsCrawled-- < 0) {
-          break;
+        for (Element link : productLinks) {
+          if (numberOfProductsCrawled-- < 0) {
+            break;
+          }
+          String productLink = link.attr("abs:href");
+          if (null == vendor) {
+            getProductDetails(productLink, vendorMap);
+          } else {
+            getProductDetails(productLink, vendor);
+          }
         }
-        String productLink = link.attr("abs:href");
-        if (null == vendor) {
-          getProductDetails(productLink, vendorMap);
-        } else {
-          getProductDetails(productLink, vendor);
+      } else {
+        JSONObject json = new JSONObject(
+                IOUtils.toString(new URL(String.format("https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&offset=0&platform=desktop&view_type=gridView&with_filters=1&seller_key=%s&lang=en&limit=100",sellerKey)),
+                        Charset.forName("UTF-8")));
+        JSONObject catalog = json.getJSONObject("catalog");
+        JSONArray items = catalog.getJSONArray("items");
+        int jj = 0;
+        for (int i = 0; i < items.length(); i++) {
+          JSONObject item = items.getJSONObject(i);
+          JSONArray productsInRow = item.getJSONArray("items");
+          for (int j = 0; j < productsInRow.length(); j++) {
+            JSONObject product = productsInRow.getJSONObject(j);
+            String productLink = product.getJSONObject("settings").getString("productLink");
+            LOGGER.info(">>>>>" + ++jj);
+            LOGGER.info(productLink);
+            if (null == vendor) {
+              getProductDetails(productLink, vendorMap);
+            } else {
+              getProductDetails(productLink, vendor);
+            }
+          }
         }
+
       }
 
     } catch (IOException e) {
       System.err.println("For '" + vendorLink + "': " + e.getMessage());
     }
-//    catch (JSONException e) {
-//      e.printStackTrace();
-//    }
+    catch (JSONException e) {
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -135,9 +165,6 @@ public class CrawlingService implements ICrawlingService {
    * @return
    */
   private Vendor getVendorDetails(String sellerKey, String vendorLink, Map<String, Vendor> vendorMap) {
-
-
-
     Vendor vendor = null;
     if (!StringUtils.isEmpty(sellerKey)) {
 //      sellerKey = sellerKey.substring(sellerKey.indexOf("-") + 1);
@@ -163,6 +190,7 @@ public class CrawlingService implements ICrawlingService {
         String negative = seller.getJSONObject("seller_reviews").getJSONObject("negative").getString("total");
         String neutral = seller.getJSONObject("seller_reviews").getJSONObject("neutral").getString("total");
         String timeOnLazada = seller.getJSONObject("time_on_lazada").getString("months");
+        String mainCategory = seller.getJSONObject("category").getString("name");
         String sellerSize = seller.getString("size");
         String rating = seller.getString("rate");
 
@@ -176,6 +204,7 @@ public class CrawlingService implements ICrawlingService {
         vendor.setSize(StringUtils.isEmpty(sellerSize) ? null : Integer.valueOf(sellerSize));
         vendor.setRating(StringUtils.isEmpty(rating) ? null : Double.valueOf(rating));
         vendor.setLink(vendorLink);
+        vendor.setMainCategory(mainCategory);
       } catch (JSONException | IOException e) {
         e.printStackTrace();
         return null;
@@ -253,6 +282,9 @@ public class CrawlingService implements ICrawlingService {
       if (null == products) {
         products = new HashSet<>();
         vendor.setProducts(products);
+      }
+      if (products.contains(vendorProduct)) {
+        LOGGER.info(vendorProduct.getName() + " is already stored");
       }
       products.add(vendorProduct);
 
