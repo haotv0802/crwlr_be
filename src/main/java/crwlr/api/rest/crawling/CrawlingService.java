@@ -92,13 +92,16 @@ public class CrawlingService implements ICrawlingService {
       Elements content = document.select(".c-product-list");
 
 //      String sellerId = document.select("body").attr("data-spm");
-      JSONObject jsonObject = new JSONObject(document.select("div.c-header-search").attr("data-js-component-params").toString());
-      jsonObject.getJSONObject("searchContext");
+//      JSONObject jsonObject = new JSONObject(document.select("div.c-header-search").attr("data-js-component-params").toString());
+//      jsonObject.getJSONObject("searchContext");
+//
+//      String sellerId = jsonObject.getJSONObject("searchContext").get("EntityID").toString();
 
-      String sellerId = jsonObject.getJSONObject("searchContext").get("EntityID").toString();
+
+      String sellerKey = vendorLink.substring(vendorLink.lastIndexOf("/") + 1);
 
       LOGGER.info(">>> Crawling vendor data: " + vendorLink);
-      Vendor vendor = getVendorDetails(sellerId, vendorLink, vendorMap);
+      Vendor vendor = getVendorDetails(sellerKey, vendorLink, vendorMap);
 
       Elements productLinks = content.select("a[href]");
 
@@ -116,26 +119,35 @@ public class CrawlingService implements ICrawlingService {
 
     } catch (IOException e) {
       System.err.println("For '" + vendorLink + "': " + e.getMessage());
-    } catch (JSONException e) {
-      e.printStackTrace();
     }
+//    catch (JSONException e) {
+//      e.printStackTrace();
+//    }
   }
 
   /**
    *
-   * @param sellerId
+   * @param sellerKey
    * @param vendorLink
    * @param vendorMap
    * @return
    */
-  private Vendor getVendorDetails(String sellerId, String vendorLink, Map<String, Vendor> vendorMap) {
+  private Vendor getVendorDetails(String sellerKey, String vendorLink, Map<String, Vendor> vendorMap) {
+
+
+
     Vendor vendor = null;
-    if (!StringUtils.isEmpty(sellerId)) {
-      sellerId = sellerId.substring(sellerId.indexOf("-") + 1);
+    if (!StringUtils.isEmpty(sellerKey)) {
+//      sellerKey = sellerKey.substring(sellerKey.indexOf("-") + 1);
       try {
+        // get vendor info by seller_id, sometimes getting error because some vendors do not have ID.
+//        JSONObject json = new JSONObject(
+//            IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=" + sellerId),
+//                Charset.forName("UTF-8")));
+
         JSONObject json = new JSONObject(
-            IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_id=" + sellerId),
-                Charset.forName("UTF-8")));
+        IOUtils.toString(new URL("https://seller-transparency-api.lazada.sg/v1/seller/transparency?platform=desktop&lang=en&seller_key=" + sellerKey),
+        Charset.forName("UTF-8")));
         JSONObject seller = (JSONObject) json.get("seller");
         String name = seller.getString("name");
         vendor = vendorMap.get(name);
