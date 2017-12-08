@@ -137,8 +137,6 @@ public class CrawlingService implements ICrawlingService {
           for (int j = 0; j < productsInRow.length(); j++) {
             JSONObject product = productsInRow.getJSONObject(j);
             String productLink = product.getJSONObject("settings").getString("productLink");
-            LOGGER.info(">>>>>" + ++jj);
-            LOGGER.info(productLink);
             if (null == vendor) {
               getProductDetails(productLink, vendorMap);
             } else {
