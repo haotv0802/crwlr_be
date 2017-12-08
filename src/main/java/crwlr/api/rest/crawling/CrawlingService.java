@@ -89,12 +89,11 @@ public class CrawlingService implements ICrawlingService {
     try {
       Document document = Jsoup.connect(vendorLink).get();
 
-      Elements content = document.select(".c-product-list");
 
+      // ********** Get Vendor info.
 //      String sellerId = document.select("body").attr("data-spm");
 //      JSONObject jsonObject = new JSONObject(document.select("div.c-header-search").attr("data-js-component-params").toString());
 //      jsonObject.getJSONObject("searchContext");
-//
 //      String sellerId = jsonObject.getJSONObject("searchContext").get("EntityID").toString();
 
 
@@ -102,6 +101,9 @@ public class CrawlingService implements ICrawlingService {
 
       LOGGER.info(">>> Crawling vendor data: " + vendorLink);
       Vendor vendor = getVendorDetails(sellerKey, vendorLink, vendorMap);
+
+      // ********** Get list of products info
+      Elements content = document.select(".c-product-list");
 
       Elements productLinks = content.select("a[href]");
 
