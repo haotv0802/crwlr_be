@@ -20,7 +20,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.print.Doc;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
@@ -272,9 +274,28 @@ public class CrawlingService implements ICrawlingService {
         category = categories.get(0).select("span").text();
       }
 
+      LOGGER.info(">>>>> " + productLink);
+
+      Elements currencyElements = document.select("div.prod_pricebox_price_final").select("span#special_currency_box");
+      String currency = currencyElements.size() > 0 ? currencyElements.get(0).text() : "";
+
+      Elements priceElements = document.select("span#special_price_box");
+      String priceStr = priceElements.size() > 0 ? priceElements.get(0).text() : "";
+
+      Elements originalPriceElements = document.select("span.price_erase").select("span#price_box");
+      String originalPriceStr = originalPriceElements.size() > 0 ? originalPriceElements.get(0).text() : "";
+      originalPriceStr = originalPriceStr.substring(originalPriceStr.lastIndexOf(currency) + currency.length() + 1, originalPriceStr.length() - 1);
+
+      Elements discountPercentElements = document.select("div.prod_saving").select("span#product_saving_percentage");
+      String discountPercentStr = discountPercentElements.size() > 0 ? discountPercentElements.get(0).text() : "";
+      Double discountPercent = StringUtils.isEmpty(discountPercentStr) ? null : new Double(discountPercentStr.substring(0, discountPercentStr.length() - 1));
       vendorProduct.setName(productName);
       vendorProduct.setCategory(category);
       vendorProduct.setLink(productLink);
+      vendorProduct.setPrice(new BigDecimal(originalPriceStr));
+      vendorProduct.setDiscountPercent(discountPercent);
+      vendorProduct.setDiscountPrice(new BigDecimal(priceStr));
+      vendorProduct.setCurrency(currency);
 
       Set<VendorProduct> products = vendor.getProducts();
       if (null == products) {

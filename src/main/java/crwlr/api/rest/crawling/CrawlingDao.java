@@ -117,14 +117,18 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
-              "INSERT INTO crwlr_products (name, category, vendor_name, link)  "
-            + "VALUE (:name, :category, :vendor_name, :link)                   "
+              "INSERT INTO crwlr_products (name, category, vendor_name, link, price, discountPrice, currency, discountPercent)"
+            + "  VALUE (:name, :category, :vendor_name, :link, :price, :discountPrice, :currency, :discountPercent)           "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());
     paramsMap.addValue("category", product.getCategory());
     paramsMap.addValue("vendor_name", vendorName);
     paramsMap.addValue("link", product.getLink());
+    paramsMap.addValue("price", product.getPrice());
+    paramsMap.addValue("discountPrice", product.getDiscountPrice());
+    paramsMap.addValue("discountPercent", product.getDiscountPercent());
+    paramsMap.addValue("currency", product.getCurrency());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -134,8 +138,9 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
-        "UPDATE crwlr_products SET category = :category, updated = :updated, link = :link"
-      + " WHERE name = :name AND vendor_name = :vendor_name                              "
+        "UPDATE crwlr_products SET category = :category, updated = :updated, link = :link,                         "
+      + " price = :price, discountPrice = :discountPrice, currency = :currency, discountPercent = :discountPercent "
+      + " WHERE name = :name AND vendor_name = :vendor_name                                                        "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());

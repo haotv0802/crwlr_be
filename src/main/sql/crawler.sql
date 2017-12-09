@@ -33,13 +33,18 @@ CREATE TABLE `crwlr_vendors` (
 --
 DROP TABLE IF EXISTS `crwlr_products`;
 CREATE TABLE `crwlr_products` (
-  `id`          BIGINT   AUTO_INCREMENT,
-  `name`        VARCHAR(300) NOT NULL,
-  `category`    VARCHAR(45)  NOT NULL,
-  `vendor_name` VARCHAR(45)  NOT NULL,
-  `link`        VARCHAR(500) NULL,
-  `created`     DATETIME DEFAULT NOW(),
-  `updated`     DATETIME     NULL,
+  `id`              BIGINT   AUTO_INCREMENT,
+  `name`            VARCHAR(300)   NOT NULL,
+  `category`        VARCHAR(45)    NOT NULL,
+  `vendor_name`     VARCHAR(45)    NOT NULL,
+  `link`            VARCHAR(500)   NULL,
+  `price`           DECIMAL(13, 4) NULL,
+  `discountPrice`   DECIMAL(13, 4) NULL,
+  `currency`        VARCHAR(4)     NULL,
+  `discountPercent` DECIMAL(9, 4)  NULL,
+  `imageURL`        VARCHAR(200)   NULL,
+  `created`         DATETIME DEFAULT NOW(),
+  `updated`         DATETIME       NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `crwlr_products` (`id`),
   CONSTRAINT `crwlr_products_vendor_name` FOREIGN KEY (`vendor_name`) REFERENCES `crwlr_vendors` (`name`)
