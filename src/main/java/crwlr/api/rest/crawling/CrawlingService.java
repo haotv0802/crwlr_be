@@ -120,13 +120,22 @@ public class CrawlingService implements ICrawlingService {
             getProductDetails(productLink, vendor);
           }
         }
-        // in case Vendor has more pages (from 2nd page)
-//        Elements pages = document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)");
-//        for (Element page : pages) {
-//          Document nextPage = Jsoup.connect(page.attr("abs:href")).get();
-//          Elements contentOfNextPage = nextPage.select(".c-product-list");
-//          this.readVendorContent(contentOfNextPage, vendor, vendorMap);
-//        }
+        //in case Vendor has more pages (from 2nd page)
+        Elements pages = document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)");
+        for (Element page : pages) {
+          Document nextPage = Jsoup.connect(page.attr("abs:href")).get();
+          Elements contentOfNextPage = nextPage.select(".c-product-list");
+          Elements nextproductLinks = contentOfNextPage.select("a[href].c-product-card__img-placeholder-inner");  // current page
+
+          for (Element nextLink : nextproductLinks) {
+            String productLink = nextLink.attr("abs:href");
+            if (null == vendor) {
+              getProductDetails(productLink, vendorMap);
+            } else {
+              getProductDetails(productLink, vendor);
+            }
+          }
+        }
 
       } else {
         JSONObject json = new JSONObject(
@@ -158,18 +167,18 @@ public class CrawlingService implements ICrawlingService {
     }
   }
 
-  private void readVendorContent(Elements content, Vendor vendor, Map<String, Vendor> vendorMap) {
-    Elements productLinks = content.select("a[href]");  // current page
-
-    for (Element link : productLinks) {
-      String productLink = link.attr("abs:href");
-      if (null == vendor) {
-        getProductDetails(productLink, vendorMap);
-      } else {
-        getProductDetails(productLink, vendor);
-      }
-    }
-  }
+//  private void readVendorContent(Elements content, Vendor vendor, Map<String, Vendor> vendorMap) {
+//    Elements productLinks = content.select("a[href]");  // current page
+//
+//    for (Element link : productLinks) {
+//      String productLink = link.attr("abs:href");
+//      if (null == vendor) {
+//        getProductDetails(productLink, vendorMap);
+//      } else {
+//        getProductDetails(productLink, vendor);
+//      }
+//    }
+//  }
 
   /**
    *
