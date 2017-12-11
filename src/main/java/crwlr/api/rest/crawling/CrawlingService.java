@@ -110,7 +110,7 @@ public class CrawlingService implements ICrawlingService {
         //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)") // get links of pages 2, 3 and so on
         //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link") // get links of pages 1, 2, 3 and so on
 //        this.readVendorContent(content, vendor, vendorMap);
-        Elements productLinks = content.select("a[href]");  // current page
+        Elements productLinks = content.select("a[href].c-product-card__img-placeholder-inner");  // current page
 
         for (Element link : productLinks) {
           String productLink = link.attr("abs:href");
