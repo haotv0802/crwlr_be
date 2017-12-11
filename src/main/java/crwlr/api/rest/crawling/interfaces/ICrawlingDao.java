@@ -15,7 +15,7 @@ public interface ICrawlingDao {
 
   void updateVendor(Vendor vendor);
 
-  boolean isProductExisting(String name, String vendorName);
+  boolean isProductExisting(String name, String vendorName, String link);
 
   void addVendorProduct(VendorProduct product, String vendorName);
 

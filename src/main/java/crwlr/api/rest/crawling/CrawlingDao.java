@@ -101,13 +101,14 @@ public class CrawlingDao implements ICrawlingDao {
   }
 
   @Override
-  public boolean isProductExisting(String name, String vendorName) {
+  public boolean isProductExisting(String name, String vendorName, String link) {
     final String sql =
-        "SELECT COUNT(*) from crwlr_products WHERE name = :name AND vendor_name = :vendor_name"
+        "SELECT COUNT(*) from crwlr_products WHERE name = :name AND vendor_name = :vendor_name AND link = :link"
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", name);
     paramsMap.addValue("vendor_name", vendorName);
+    paramsMap.addValue("link", link);
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -117,8 +118,8 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void addVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
-              "INSERT INTO crwlr_products (name, category, vendor_name, link, price, discountPrice, currency, discountPercent)"
-            + "  VALUE (:name, :category, :vendor_name, :link, :price, :discountPrice, :currency, :discountPercent)           "
+              "INSERT INTO crwlr_products (name, category, vendor_name, link, price, discountPrice, currency, discountPercent, imageURL)"
+            + "  VALUE (:name, :category, :vendor_name, :link, :price, :discountPrice, :currency, :discountPercent, :imageURL)           "
         ;
     final MapSqlParameterSource paramsMap = new MapSqlParameterSource();
     paramsMap.addValue("name", product.getName());
@@ -129,6 +130,7 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("discountPrice", product.getDiscountPrice());
     paramsMap.addValue("discountPercent", product.getDiscountPercent());
     paramsMap.addValue("currency", product.getCurrency());
+    paramsMap.addValue("imageURL", product.getImageURL());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 
@@ -138,7 +140,7 @@ public class CrawlingDao implements ICrawlingDao {
   @Override
   public void updateVendorProduct(VendorProduct product, String vendorName) {
     final String sql =
-        "UPDATE crwlr_products SET category = :category, updated = :updated, link = :link,                         "
+        "UPDATE crwlr_products SET category = :category, updated = :updated, link = :link, imageURL = :imageURL,   "
       + " price = :price, discountPrice = :discountPrice, currency = :currency, discountPercent = :discountPercent "
       + " WHERE name = :name AND vendor_name = :vendor_name                                                        "
         ;
@@ -148,6 +150,11 @@ public class CrawlingDao implements ICrawlingDao {
     paramsMap.addValue("vendor_name", vendorName);
     paramsMap.addValue("updated", new Date());
     paramsMap.addValue("link", product.getLink());
+    paramsMap.addValue("price", product.getPrice());
+    paramsMap.addValue("discountPrice", product.getDiscountPrice());
+    paramsMap.addValue("discountPercent", product.getDiscountPercent());
+    paramsMap.addValue("currency", product.getCurrency());
+    paramsMap.addValue("imageURL", product.getImageURL());
 
     DaoUtils.debugQuery(LOGGER, sql, paramsMap.getValues());
 

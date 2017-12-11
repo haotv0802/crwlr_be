@@ -68,7 +68,8 @@ public class CrawlingService implements ICrawlingService {
       for (VendorProduct product: products) {
 
         // Saving Product
-//        if (crawlingDao.isProductExisting(product.getName(), vendor.getName())) {
+        // link of product contains accessing time.
+//        if (crawlingDao.isProductExisting(product.getName(), vendor.getName(), product.getLink())) {
 //          crawlingDao.updateVendorProduct(product, vendor.getName());
 //        } else {
 //          crawlingDao.addVendorProduct(product, vendor.getName());
@@ -295,6 +296,9 @@ public class CrawlingService implements ICrawlingService {
       Elements discountPercentElements = document.select("div.prod_saving").select("span#product_saving_percentage");
       String discountPercentStr = discountPercentElements.size() > 0 ? discountPercentElements.get(0).text() : "";
       Double discountPercent = StringUtils.isEmpty(discountPercentStr) ? null : new Double(discountPercentStr.substring(0, discountPercentStr.length() - 1));
+
+      String imageURL = document.select("div#productZoom").attr("data-zoom-image").toString();
+
       vendorProduct.setName(productName);
       vendorProduct.setCategory(category);
       vendorProduct.setLink(productLink);
@@ -302,6 +306,7 @@ public class CrawlingService implements ICrawlingService {
       vendorProduct.setDiscountPercent(discountPercent);
       vendorProduct.setDiscountPrice(new BigDecimal(priceStr));
       vendorProduct.setCurrency(currency);
+      vendorProduct.setImageURL(imageURL);
 
       Set<VendorProduct> products = vendor.getProducts();
       if (null == products) {
