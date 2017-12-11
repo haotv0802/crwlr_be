@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
-import javax.print.Doc;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
@@ -111,9 +110,12 @@ public class CrawlingService implements ICrawlingService {
       // ********** Get list of products info
       Elements content = document.select(".c-product-list");
 
-      // Vendor like "value-market" has ".c-product-list", the other like the-bro-store uses REST API to get products list.
+      // Vendor like "value-market" has ".c-product-list", but the other like the-bro-store uses REST API to get products list.
       if (content.size() != 0) {
-        Elements productLinks = content.select("a[href]");
+        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)") // get links of pages 2, 3 and so on
+        //document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link") // get links of pages 1, 2, 3 and so on
+//        this.readVendorContent(content, vendor, vendorMap);
+        Elements productLinks = content.select("a[href]");  // current page
 
         for (Element link : productLinks) {
           if (numberOfProductsCrawled-- < 0) {
@@ -126,13 +128,20 @@ public class CrawlingService implements ICrawlingService {
             getProductDetails(productLink, vendor);
           }
         }
+        // in case Vendor has more pages (from 2nd page)
+//        Elements pages = document.select("div.c-paging").select("div.c-paging__wrapper").select("a.c-paging__link:not(.c-paging__link-current)");
+//        for (Element page : pages) {
+//          Document nextPage = Jsoup.connect(page.attr("abs:href")).get();
+//          Elements contentOfNextPage = nextPage.select(".c-product-list");
+//          this.readVendorContent(contentOfNextPage, vendor, vendorMap);
+//        }
+
       } else {
         JSONObject json = new JSONObject(
                 IOUtils.toString(new URL(String.format("https://catalog-rendering-api.lazada.sg/v1/seller/catalog?sort=popularity&offset=0&platform=desktop&view_type=gridView&with_filters=1&seller_key=%s&lang=en&limit=100",sellerKey)),
                         Charset.forName("UTF-8")));
         JSONObject catalog = json.getJSONObject("catalog");
         JSONArray items = catalog.getJSONArray("items");
-        int jj = 0;
         for (int i = 0; i < items.length(); i++) {
           JSONObject item = items.getJSONObject(i);
           JSONArray productsInRow = item.getJSONArray("items");
@@ -154,6 +163,22 @@ public class CrawlingService implements ICrawlingService {
     }
     catch (JSONException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void readVendorContent(Elements content, Vendor vendor, Map<String, Vendor> vendorMap) {
+    Elements productLinks = content.select("a[href]");  // current page
+
+    for (Element link : productLinks) {
+      if (numberOfProductsCrawled-- < 0) {
+        break;
+      }
+      String productLink = link.attr("abs:href");
+      if (null == vendor) {
+        getProductDetails(productLink, vendorMap);
+      } else {
+        getProductDetails(productLink, vendor);
+      }
     }
   }
 
