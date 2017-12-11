@@ -55,8 +55,7 @@ public class CrawlingResource {
 
   @GetMapping("/crawler/crawlingData")
   public Map<String, Vendor> crawlingData(
-      @RequestParam(value = "link", required = false) String link,
-      @RequestParam(value = "numberOfProductsCrawled", defaultValue = "5", required = false) Integer numberOfProductsCrawled
+      @RequestParam(value = "link", required = false) String link
   ) {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
@@ -73,7 +72,7 @@ public class CrawlingResource {
     } else {
       pages.add(link);
     }
-    return this.crawlingService.saveCrawledData(pages, numberOfProductsCrawled);
+    return this.crawlingService.saveCrawledData(pages);
   }
 
   @GetMapping("/crawler/vendors")

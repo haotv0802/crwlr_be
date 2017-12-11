@@ -11,5 +11,5 @@ import java.util.Map;
  * @author haho
  */
 public interface ICrawlingService {
-  Map<String, Vendor> saveCrawledData(List<String> pages, Integer numberOfProductsCrawled);
+  Map<String, Vendor> saveCrawledData(List<String> pages);
 }

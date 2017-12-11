@@ -38,8 +38,6 @@ public class CrawlingService implements ICrawlingService {
 
   private final Logger LOGGER = LogManager.getLogger(getClass());
 
-  private int numberOfProductsCrawled = 5;
-
   @Autowired
   public CrawlingService(@Qualifier("crawlingDao") ICrawlingDao crawlingDao) {
     Assert.notNull(crawlingDao);
@@ -48,14 +46,11 @@ public class CrawlingService implements ICrawlingService {
   }
 
   @Override
-  public Map<String, Vendor> saveCrawledData(List<String> pages, Integer numberOfProductsCrawled) {
-    if (null == numberOfProductsCrawled) {
-      numberOfProductsCrawled = this.numberOfProductsCrawled;
-    }
+  public Map<String, Vendor> saveCrawledData(List<String> pages) {
 
     Map<String, Vendor> vendorMap = new HashMap<>();
     for (String page : pages) {
-      getVendorProduct(page, vendorMap, numberOfProductsCrawled);
+      getVendorProduct(page, vendorMap);
     }
 
     Set<String> keys = vendorMap.keySet();
@@ -90,7 +85,7 @@ public class CrawlingService implements ICrawlingService {
    * Get list of products from given Vendor.
    * @param vendorLink
    */
-  private void getVendorProduct(String vendorLink, Map<String, Vendor> vendorMap, int numberOfProductsCrawled) {
+  private void getVendorProduct(String vendorLink, Map<String, Vendor> vendorMap) {
     try {
       Document document = Jsoup.connect(vendorLink).get();
 
@@ -118,9 +113,6 @@ public class CrawlingService implements ICrawlingService {
         Elements productLinks = content.select("a[href]");  // current page
 
         for (Element link : productLinks) {
-          if (numberOfProductsCrawled-- < 0) {
-            break;
-          }
           String productLink = link.attr("abs:href");
           if (null == vendor) {
             getProductDetails(productLink, vendorMap);
@@ -170,9 +162,6 @@ public class CrawlingService implements ICrawlingService {
     Elements productLinks = content.select("a[href]");  // current page
 
     for (Element link : productLinks) {
-      if (numberOfProductsCrawled-- < 0) {
-        break;
-      }
       String productLink = link.attr("abs:href");
       if (null == vendor) {
         getProductDetails(productLink, vendorMap);
