@@ -1,9 +1,9 @@
-package crwlr.api.rest.crawling;
+package crwlr.api.rest.crawling.lazada;
 
-import crwlr.api.rest.crawling.beans.VendorPresenter;
-import crwlr.api.rest.crawling.beans.VendorProductPresenter;
-import crwlr.api.rest.crawling.interfaces.ICrawledDataDao;
-import crwlr.api.rest.crawling.interfaces.ICrawledDataService;
+import crwlr.api.rest.crawling.lazada.beans.VendorPresenter;
+import crwlr.api.rest.crawling.lazada.beans.VendorProductPresenter;
+import crwlr.api.rest.crawling.lazada.interfaces.ICrawledDataDao;
+import crwlr.api.rest.crawling.lazada.interfaces.ICrawledDataService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

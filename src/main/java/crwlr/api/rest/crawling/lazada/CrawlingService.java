@@ -1,9 +1,9 @@
-package crwlr.api.rest.crawling;
+package crwlr.api.rest.crawling.lazada;
 
-import crwlr.api.rest.crawling.beans.Vendor;
-import crwlr.api.rest.crawling.beans.VendorProduct;
-import crwlr.api.rest.crawling.interfaces.ICrawlingDao;
-import crwlr.api.rest.crawling.interfaces.ICrawlingService;
+import crwlr.api.rest.crawling.lazada.beans.Vendor;
+import crwlr.api.rest.crawling.lazada.beans.VendorProduct;
+import crwlr.api.rest.crawling.lazada.interfaces.ICrawlingDao;
+import crwlr.api.rest.crawling.lazada.interfaces.ICrawlingService;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;

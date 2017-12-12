@@ -1,10 +1,10 @@
-package crwlr.api.rest.crawling;
+package crwlr.api.rest.crawling.lazada;
 
-import crwlr.api.rest.crawling.beans.Vendor;
-import crwlr.api.rest.crawling.beans.VendorPresenter;
-import crwlr.api.rest.crawling.beans.VendorProductPresenter;
-import crwlr.api.rest.crawling.interfaces.ICrawledDataService;
-import crwlr.api.rest.crawling.interfaces.ICrawlingService;
+import crwlr.api.rest.crawling.lazada.beans.Vendor;
+import crwlr.api.rest.crawling.lazada.beans.VendorPresenter;
+import crwlr.api.rest.crawling.lazada.beans.VendorProductPresenter;
+import crwlr.api.rest.crawling.lazada.interfaces.ICrawledDataService;
+import crwlr.api.rest.crawling.lazada.interfaces.ICrawlingService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,15 +60,15 @@ public class CrawlingResource {
     List<String> pages = new ArrayList<>();
     if (StringUtils.isEmpty(link)) {
       pages.add("https://www.lazada.sg/value-market");
-      pages.add("https://www.lazada.sg/empire-13");
-      pages.add("https://www.lazada.sg/boom_");
-      pages.add("https://www.lazada.sg/the-bro-store");
-      pages.add("https://www.lazada.sg/taka-jewellery1");
-      pages.add("https://www.lazada.sg/crystalawaking");
-      pages.add("https://www.lazada.sg/nicee-shop");
-      pages.add("https://www.lazada.sg/itechcool");
-      pages.add("https://www.lazada.sg/selffix-pte-ltd");
-      pages.add("https://www.lazada.sg/originalfook");
+//      pages.add("https://www.lazada.sg/empire-13");
+//      pages.add("https://www.lazada.sg/boom_");
+//      pages.add("https://www.lazada.sg/the-bro-store");
+//      pages.add("https://www.lazada.sg/taka-jewellery1");
+//      pages.add("https://www.lazada.sg/crystalawaking");
+//      pages.add("https://www.lazada.sg/nicee-shop");
+//      pages.add("https://www.lazada.sg/itechcool");
+//      pages.add("https://www.lazada.sg/selffix-pte-ltd");
+//      pages.add("https://www.lazada.sg/originalfook");
     } else {
       pages.add(link);
     }

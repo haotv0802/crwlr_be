@@ -1,4 +1,4 @@
-package crwlr.api.rest.crawling.beans;
+package crwlr.api.rest.crawling.lazada.beans;
 
 /**
  * Date: 10/20/2017 Time: 10:56 AM

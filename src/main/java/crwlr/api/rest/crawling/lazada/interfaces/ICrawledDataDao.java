@@ -1,7 +1,7 @@
-package crwlr.api.rest.crawling.interfaces;
+package crwlr.api.rest.crawling.lazada.interfaces;
 
-import crwlr.api.rest.crawling.beans.VendorPresenter;
-import crwlr.api.rest.crawling.beans.VendorProductPresenter;
+import crwlr.api.rest.crawling.lazada.beans.VendorPresenter;
+import crwlr.api.rest.crawling.lazada.beans.VendorProductPresenter;
 
 import java.util.List;
 

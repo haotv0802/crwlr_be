@@ -1,7 +1,7 @@
-package crwlr.api.rest.crawling.interfaces;
+package crwlr.api.rest.crawling.lazada.interfaces;
 
-import crwlr.api.rest.crawling.beans.Vendor;
-import crwlr.api.rest.crawling.beans.VendorProduct;
+import crwlr.api.rest.crawling.lazada.beans.Vendor;
+import crwlr.api.rest.crawling.lazada.beans.VendorProduct;
 
 /**
  * Date: 10/19/2017 Time: 4:56 PM

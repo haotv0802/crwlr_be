@@ -1,4 +1,4 @@
-package crwlr.api.rest.crawling.beans;
+package crwlr.api.rest.crawling.lazada.beans;
 
 import java.math.BigDecimal;
 

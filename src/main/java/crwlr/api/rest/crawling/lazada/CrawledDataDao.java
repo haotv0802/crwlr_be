@@ -1,20 +1,17 @@
-package crwlr.api.rest.crawling;
+package crwlr.api.rest.crawling.lazada;
 
-import crwlr.api.rest.crawling.beans.VendorPresenter;
-import crwlr.api.rest.crawling.beans.VendorProductPresenter;
-import crwlr.api.rest.crawling.interfaces.ICrawledDataDao;
+import crwlr.api.rest.crawling.lazada.beans.VendorPresenter;
+import crwlr.api.rest.crawling.lazada.beans.VendorProductPresenter;
+import crwlr.api.rest.crawling.lazada.interfaces.ICrawledDataDao;
 import crwlr.common.dao.DaoUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.Assert;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 
 /**

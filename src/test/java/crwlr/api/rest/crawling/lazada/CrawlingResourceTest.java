@@ -1,4 +1,4 @@
-package crwlr.api.rest.crwlr;
+package crwlr.api.rest.crawling.lazada;
 
 import crwlr.api.rest.TestBase;
 import org.testng.annotations.Test;
